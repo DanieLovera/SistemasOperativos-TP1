@@ -15,12 +15,20 @@ rejected_files_dir=$(pwd | sed 's-/sisop$-/rechazos-')
 lots_dir=$(pwd | sed 's-/sisop$-/lotes-')
 results_dir=$(pwd | sed 's-/sisop$-/SALIDATP-')
 
+function make_confirm_directories_names() {
+	echo "${group_dir##*/}" > ./.confirm_directories
+	echo "sisop" >> ./.confirm_directories
+	echo "original" >> ./.confirm_directories
+	echo "tp1datos" >> ./.confirm_directories
+	echo "misdatos" >> ./.confirm_directories
+	echo "mispruebas" >> ./.confirm_directories
+}
+
+function remove_confirm_directories_names() {
+	rm ./.confirm_directories
+}
+
 # Lee algun directorio de entrada del usuario.
-# El directorio ingresado por el usuario debe encontrarse en la ruta
-# $(GRUPO4)/, las verificaciones de existencias de archivos se realizan
-# sobre el directorio padre de $(GRUPO4) para validar la no inclusion
-# del mismo archivo Grupo4. Por lo tanto como hipotesis, no se pueden
-# definir rutas de archivos como nombres que esten fuera de $(GRUPO4)/
 # @param $1: mensaje que se quiere mostrar en pantalla (como contexto
 # del directorio).
 # @param $2: ruta del directorio de instalacion.
@@ -35,10 +43,10 @@ function read_directory() {
 		tmp_dir=$2
 	fi
 
-	local found=$(find ../.. -type d -name ${tmp_dir##*/})
+	local found=$(grep "^${tmp_dir##*/}$" ./.confirm_directories)
 	while [ ! -z ${found} ] 
 	do
-		echo -e "\nNombre invalido, el directorio ya existe."
+		echo -e "\nNombre invalido, directorio reservado/existente."
 		echo "- Defina el nombre del $1 o presione enter para"
 		read -p "  continuar [directorio por defecto $2]: " tmp_dir
 
@@ -47,9 +55,10 @@ function read_directory() {
 			tmp_dir=$2
 		fi
 
-		found=$(find ../.. -type d -name ${tmp_dir##*/})
+		found=$(grep "^${tmp_dir##*/}$" ./.confirm_directories)
 	done
 
+	echo "${tmp_dir##*/}" >> ./.confirm_directories
 	mkdir ${tmp_dir}
 	tmp_dir=$(find "$(cd ../..; pwd)" -type d -name ${tmp_dir##*/})
 	rm -r ${tmp_dir}
@@ -145,9 +154,10 @@ function make_all() {
 	make_directories
 }
 
-
 # Instala el sistema haciendo uso de las demas funciones.
 function install() {
+	make_confirm_directories_names
+
 	if [ ! -f ${conf_file_path} ]
 	then
 		echo -e "Comenzando instalacion del sistema...\n"
@@ -177,6 +187,7 @@ function install() {
 	else
 		echo "El sistema ya se encuentra instalado."
 	fi
+	remove_confirm_directories_names
 }
 
 echo "Iniciando sistema..."
