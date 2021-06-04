@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#sed -i "s-^INSTALACION-REPARACION-" ./sotp1.conf 
-
 # Rutas de todos los archivos default creados.
 group_dir=$(dirname $(pwd))
 install_script_path=$(pwd | sed 's-$-/sotp1.sh-')
@@ -20,6 +18,7 @@ rejected_files_dir=$(pwd | sed 's-/sisop$-/rechazos-')
 lots_dir=$(pwd | sed 's-/sisop$-/lotes-')
 results_dir=$(pwd | sed 's-/sisop$-/SALIDATP-')
 
+# Lista con los datos del archivo de configuracion final.
 conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir" "$news_input_dir" "$rejected_files_dir" "$lots_dir" "$results_dir")
 
 # Loggea INF a sotp1.log
@@ -90,7 +89,6 @@ function read_directory() {
 		then
 			tmp_dir=$2
 		fi
-
 		found=$(grep "^${tmp_dir##*/}$" ${confirmed_directories})
 	done
 
@@ -227,11 +225,15 @@ function make_files() {
 	touch_file "Log del proceso principal" ${proc_log_path}
 }
 
+# Crea el directorio ejecutables y copia ejecutables del directorio
+# original
 function make_exe_dir() {
 	make_directory "Directorio de ejecutables" ${conf_directories[2]}
 	# COPIAR ACA LOS EJECUTABLES CUANDO ESTEN DEL PASO 5.
 }
 
+# Crea el directorio maestro (del sistema) y copia las tablas maestras
+# del directorio original.
 function make_sys_tables_dir() {
 	make_directory "Directorio de tablas del sistema" ${conf_directories[3]}
 	copy_from_to "../original/financiacion.txt" "${conf_directories[3]}"
