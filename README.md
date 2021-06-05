@@ -2,7 +2,7 @@
 **Grupo 4**  
   
 **Autores:**  
-- **Manuel Longo**  102425** 
+- **Manuel Longo - 102425** 
 - **Federico Burman - 104112**   
 - **Agustin More** (CORREGIR)  
 - **Daniel Alejandro Lovera López - 103442**
