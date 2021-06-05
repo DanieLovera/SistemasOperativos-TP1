@@ -1,0 +1,76 @@
+ ,Entidad,002,00010942,000099999999,Cualquier Rubro 2 cuotas												
+ ,Entidad,003,00011288,000099999999,Cualquier Rubro 3 cuotas												
+ ,Entidad,006,00012384,000099999999,Cualquier Rubro 6 cuotas												
+ ,Entidad,009,00013822,000099999999,Cualquier Rubro 9 cuotas												
+ ,Entidad,012,00015216,000099999999,Cualquier Rubro 12 cuotas												
+ ,Entidad,018,00018392,000099999999,Cualquier Rubro 18 cuotas												
+ALARM,Ahora03,003,00010305,000099999999,Servicios de instalación de alarmas (3 y 6 cuotas)												
+BALNEA,Ahora03,003,00010305,000099999999,Balnearios.- Ahora 3 Ahora 6 Ahora 12 cuotas												
+CALZAD,Ahora03,003,00010305,000099999999,Calzado y marroquinería (3 y 6 cuotas)												
+EDUCAT,Ahora03,003,00010305,000099999999,Servicios educativos (3 y 6 cuotas)												
+ELECTR,Ahora03,003,00010305,000099999999,Pequeños electrodomésticos (3 y 6 cuotas)												
+EVENTO,Ahora03,003,00010305,000099999999,Servicios de organización de eventos.- Ahora 3 y 6												
+GIMNAC,Ahora03,003,00010305,000099999999,Servicios de preparación p deporte Ahora 3 6 12 18												
+HERRAM,Ahora03,003,00010305,000099999999,Maquinaria y herramientas (3 y 6 cuotas)												
+ILUMIN,Ahora03,003,00010305,000099999999,Artefactos de iluminación (3 y 6 cuotas)												
+INDUME,Ahora03,003,00010305,000099999999,Indumentaria (3 y 6 cuotas)												
+JUGUET,Ahora03,003,00010305,000099999999,Juguetes.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18												
+LENTES,Ahora03,003,00010305,000001000000,Anteojos y lentes de contacto (3 y 6 cuotas)												
+LIBRER,Ahora03,003,00010305,000099999999,Artículos de librería.- Ahora 3 6 12 y 18 cuotas												
+LIBROS,Ahora03,003,00010305,000099999999,Libros.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.-												
+MUEBLE,Ahora03,003,00010305,000099999999,Muebles.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.												
+PELUQU,Ahora03,003,00010305,000099999999,Servicios de cuidado personal (3 y 6 cuotas)												
+PERFUM,Ahora03,003,00010305,000099999999,Perfumería (3 y 6 cuotas)												
+REPARA,Ahora03,003,00010305,000099999999,Servicios de reparaciones (3 y 6 cuotas)												
+ALARM,Ahora06,006,00010611,000099999999,Servicios de instalación de alarmas (3 y 6 cuotas)												
+BALNEA,Ahora06,006,00010611,000099999999,Balnearios.- Ahora 3 Ahora 6 Ahora 12 cuotas												
+CALZAD,Ahora06,006,00010611,000099999999,Calzado y marroquinería (3 y 6 cuotas)												
+EDUCAT,Ahora06,006,00010611,000099999999,Servicios educativos (3 y 6 cuotas)												
+ELECTR,Ahora06,006,00010611,000099999999,Pequeños electrodomésticos (3 y 6 cuotas)												
+EVENTO,Ahora06,006,00010611,000099999999,Servicios de organización de eventos.- Ahora 3 y 6												
+GIMNAC,Ahora06,006,00010611,000099999999,Servicios de preparación p deporte Ahora 3 6 12 18												
+HERRAM,Ahora06,006,00010611,000099999999,Maquinaria y herramientas (3 y 6 cuotas)												
+ILUMIN,Ahora06,006,00010611,000099999999,Artefactos de iluminación (3 y 6 cuotas)												
+INDUME,Ahora06,006,00010611,000099999999,Indumentaria (3 y 6 cuotas)												
+JUGUET,Ahora06,006,00010611,000099999999,Juguetes.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18												
+LENTES,Ahora06,006,00010611,000001000000,Anteojos y lentes de contacto (3 y 6 cuotas)												
+LIBRER,Ahora06,006,00010611,000099999999,Artículos de librería.- Ahora 3 6 12 y 18 cuotas												
+LIBROS,Ahora06,006,00010611,000099999999,Libros.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.-												
+MUEBLE,Ahora06,006,00010611,000099999999,Muebles.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.												
+PELUQU,Ahora06,006,00010611,000099999999,Servicios de cuidado personal (3 y 6 cuotas)												
+PERFUM,Ahora06,006,00010611,000099999999,Perfumería (3 y 6 cuotas)												
+REPARA,Ahora06,006,00010611,000099999999,Servicios de reparaciones (3 y 6 cuotas)												
+TURISM,Ahora06,006,00010611,000099999999,Turismo.- Ahora 3. Ahora 6 cuotas. Ahora 12 cuotas												
+BALNEA,Ahora12,012,00011247,000099999999,Balnearios.- Ahora 3 Ahora 6 Ahora 12 cuotas												
+BICICL,Ahora12,012,00011247,000099999999,Bicicletas (sólo 12 y 18 cuotas)												
+BLANCA,Ahora12,012,00011247,000099999999,Línea blanca (12 y 18 cuotas)												
+COLCHO,Ahora12,012,00011247,000099999999,Colchones (12 y 18 cuotas)												
+COMPUT,Ahora12,012,00011247,000099999999,Computadoras notebooks y tabletas (12 y 18 cuotas)												
+CONSTR,Ahora12,012,00011247,000099999999,Materiales herramientas construcción Ahora 12 y 18												
+GIMNAC,Ahora12,012,00011247,000099999999,Servicios de preparación p deporte Ahora 3 6 12 18												
+JUGUET,Ahora12,012,00011247,000099999999,Juguetes.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18												
+LIBRER,Ahora12,012,00011247,000099999999,Artículos de librería.- Ahora 3 6 12 y 18 cuotas												
+LIBROS,Ahora12,012,00011247,000099999999,Libros.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.-												
+MEDICO,Ahora12,012,00011247,000099999999,Equipamiento médico (12 y 18 cuotas)												
+MOTOCI,Ahora12,012,00011247,000025000000,Motos.- Ahora 12 cuotas y Ahora 18 cuotas.-												
+MUEBLE,Ahora12,012,00011247,000099999999,Muebles.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.												
+MUSICA,Ahora12,012,00011247,000099999999,Instrumentos musicales (12 y 18 cuotas)												
+NUEMAT,Ahora12,012,00011247,000099999999,Neumáticos accesorios y repuestos (12 y 18 cuotas)												
+TELEVI,Ahora12,012,00011247,000099999999,Televisores (12 y 18 cuotas)												
+TURISM,Ahora12,012,00011247,000099999999,Turismo.- Ahora 3. Ahora 6 cuotas. Ahora 12 cuotas												
+BICICL,Ahora18,018,00011915,000099999999,Bicicletas (sólo 12 y 18 cuotas)												
+BLANCA,Ahora18,018,00011915,000099999999,Línea blanca (12 y 18 cuotas)												
+COLCHO,Ahora18,018,00011915,000099999999,Colchones (12 y 18 cuotas)												
+COMPUT,Ahora18,018,00011915,000099999999,Computadoras notebooks y tabletas (12 y 18 cuotas)												
+CONSTR,Ahora18,018,00011915,000099999999,Materiales herramientas construcción Ahora 12 y 18												
+GIMNAC,Ahora18,018,00011915,000099999999,Servicios de preparación p deporte Ahora 3 6 12 18												
+JUGUET,Ahora18,018,00011915,000099999999,Juguetes.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18												
+LIBRER,Ahora18,018,00011915,000099999999,Artículos de librería.- Ahora 3 6 12 y 18 cuotas												
+LIBROS,Ahora18,018,00011915,000099999999,Libros.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.-												
+MEDICO,Ahora18,018,00011915,000099999999,Equipamiento médico (12 y 18 cuotas)												
+MOTOCI,Ahora18,018,00011915,000025000000,Motos.- Ahora 12 cuotas y Ahora 18 cuotas.-												
+MUEBLE,Ahora18,018,00011915,000099999999,Muebles.- Ahora 3.- Ahora 6.- Ahora 12.- Ahora 18.												
+MUSICA,Ahora18,018,00011915,000099999999,Instrumentos musicales (12 y 18 cuotas)												
+NUEMAT,Ahora18,018,00011915,000099999999,Neumáticos accesorios y repuestos (12 y 18 cuotas)												
+TELEVI,Ahora18,018,00011915,000099999999,Televisores (12 y 18 cuotas)												
+TURISM,Ahora18,018,00011915,000099999999,Turismo.- Ahora 3. Ahora 6 cuotas. Ahora 12 cuotas												
