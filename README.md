@@ -3,7 +3,7 @@
   
 **Autores:**  
 - **Manuel Longo**  (CORREGIR)
-- **Federico Burman** (CORREGIR)  
+- **Federico Burman - 104112**   
 - **Agustin More** (CORREGIR)  
 - **Daniel Alejandro Lovera López - 103442**
 
