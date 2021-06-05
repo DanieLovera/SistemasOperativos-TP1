@@ -330,7 +330,7 @@ function load_conf_directories() {
 function is_missing_directory() {
 	for directory in "${conf_directories[@]}"
 	do
-    	if [[ ! -d "${directory}" || ! -d ${news_input_ok_dir} ]] 
+    	if [[ ! -d "${directory}" || ! -d "${news_input_ok_dir}" ]] 
     	then
        		return 1
     	fi
@@ -342,6 +342,7 @@ function is_missing_directory() {
 # @return Devuelve 1 en caso de que falte un archivo
 # principal y 0 en caso contrario.
 function is_missing_file() {
+	# ACA TAMBIEN HAY QUE AGREGAR REVISAR LOS BINARIOS DEL PASO 5
 	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
 		  !	-f "${conf_directories[3]}/terminales.txt" ]]
 	then
