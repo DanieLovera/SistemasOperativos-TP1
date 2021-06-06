@@ -4,7 +4,7 @@
 **Autores:**  
 - **Manuel Longo - 102425** 
 - **Federico Burman - 104112**   
-- **Agustin More** (CORREGIR)  
+- **Agustín More - 102914**  
 - **Daniel Alejandro Lovera López - 103442**
 
 ## Acceso ##
