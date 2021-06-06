@@ -1,11 +1,23 @@
 #!/bin/bash
 
+# #PARA FEDEBUR
 path_to_log="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/sisop/tpcuotas.log"
 path_to_entry="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/ENTRADATP"
 path_to_lote="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/lotes"
 path_to_rechazos="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/rechazos"
 path_to_ok="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/ENTRADATP/ok"
 path_to_sal="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/SALIDATP"
+path_to_terminales="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/original/terminales.txt"
+
+# #PARA MANULON
+# path_to_log="/home/manulon/Escritorio/TP1-SISOP/Grupo4/sisop/tpcuotas.log"
+# path_to_entry="/home/manulon/Escritorio/TP1-SISOP/Grupo4/ENTRADATP"
+# path_to_lote="/home/manulon/Escritorio/TP1-SISOP/Grupo4/lotes"
+# path_to_rechazos="/home/manulon/Escritorio/TP1-SISOP/Grupo4/rechazos"
+# path_to_ok="/home/manulon/Escritorio/TP1-SISOP/Grupo4/ENTRADATP/ok"
+# path_to_sal="/home/manulon/Escritorio/TP1-SISOP/Grupo4/SALIDATP"
+# path_to_terminales="/home/manulon/Escritorio/TP1-SISOP/Grupo4/master/terminales.txt"
+
 cycle=1
 
 
@@ -17,11 +29,12 @@ function log_war() {
 	echo "WAR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> ${path_to_log}
 }
 function log_err() {
-	echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> ${path_to_log}
+    echo ${1}
+	echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${1}-$(whoami)" >> ${path_to_log}
 }
 function reject_field() {
     local rejected_transactions=${path_to_rechazos}/${comercio}/transacciones.rech
-    echo "Se rechazo por $1 desde el archivo $2 el registro: " >> ${rejected_transactions}
+    echo "Se rechazo porque $1 desde el archivo $2 el registro: " >> ${rejected_transactions}
     echo "$3" >> ${rejected_transactions} 
 }
 function duplicate() {
@@ -86,20 +99,55 @@ function process_file() {
     local comercio=$(echo ${file_name} | cut -c 5-9) #substring
     mkdir -p ${path_to_rechazos}/${comercio}
     grep "^" ${path_to_entry}/${file_name} | process_registers
+    echo "a,sdfhjs" >> ${path_to_sal}/${comercio}.txt
+function log_missing_registers() {
+    msg="En el archivo ${file_name} faltan los registros "
+    while [ ${idx} -lt ${index} ]
+    do
+        msg="${msg}${idx} "
+        idx=$((${idx}+1))
+    done
+    echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${msg}-$(whoami)" >> ${path_to_log}
 }
 function process_registers() {
     idx=1
+    idx=$((10#${idx}))
     while  read -r register || [[ -n "${register}" ]]
     do
         local fields=$(echo "${register}" |  grep -o "," | wc -l)
         if [ ! ${fields} -eq 13 ]; then
             reject_field "cantidad de campos incorrecta" ${file_name} ${register}
         fi
-        index=$(echo "${register}" | cut -d "," -1f)
+        index=$(echo "${register}" | cut -d "," -f1)
         index=$((10#${index}))
+
         if [ ${idx} -gt ${index} ] ; then
-        #aca hay que decidir que hacer siguiendo lo que dice la pagina17 
+            reject_field "la secuencia es menor a la esperada" ${file_name} ${register}
         fi
+
+        if [ ${index} -gt ${idx} ] ; then
+            log_missing_registers
+            idx=$((${index}))
+        fi
+
+        comercio_code=$(echo "${register}" | cut -d "," -f2 | cut -c 2-6)
+
+        if [ ! ${comercio_code} -eq ${comercio} ] ; then
+            reject_field "no coincide el numero de comercio con el nombre del archivo"\ 
+            ${file_name} ${register}           
+        fi
+
+        x=$(echo "${register}" | cut -d "," -f2)
+        y=$(echo "${register}" | cut -d "," -f3)
+        z="${x},${y}"
+
+        terminales_line_found=$(grep ${z} ${path_to_terminales})
+
+        if [[ "${z}" != "${terminales_line_found}" ]] ; then
+            reject_field "no existe en la tabla maestra terminales.txt" ${file_name} ${register}           
+        fi
+
+        idx=$((${idx}+1))
     done
 }
 function filter_bad_file() {
