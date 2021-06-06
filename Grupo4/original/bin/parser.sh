@@ -8,6 +8,7 @@ path_to_rechazos="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/rec
 path_to_ok="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/ENTRADATP/ok"
 path_to_sal="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/SALIDATP"
 path_to_terminales="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/original/terminales.txt"
+path_to_financiacion="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4/original/financiacion.txt"
 
 # #PARA MANULON
 # path_to_log="/home/manulon/Escritorio/TP1-SISOP/Grupo4/sisop/tpcuotas.log"
@@ -99,7 +100,7 @@ function process_file() {
     local comercio=$(echo ${file_name} | cut -c 5-9) #substring
     mkdir -p ${path_to_rechazos}/${comercio}
     grep "^" ${path_to_entry}/${file_name} | process_registers
-    echo "a,sdfhjs" >> ${path_to_sal}/${comercio}.txt
+}
 function log_missing_registers() {
     msg="En el archivo ${file_name} faltan los registros "
     while [ ${idx} -lt ${index} ]
@@ -117,6 +118,7 @@ function process_registers() {
         local fields=$(echo "${register}" |  grep -o "," | wc -l)
         if [ ! ${fields} -eq 13 ]; then
             reject_field "cantidad de campos incorrecta" ${file_name} ${register}
+
         fi
         index=$(echo "${register}" | cut -d "," -f1)
         index=$((10#${index}))
@@ -146,9 +148,41 @@ function process_registers() {
         if [[ "${z}" != "${terminales_line_found}" ]] ; then
             reject_field "no existe en la tabla maestra terminales.txt" ${file_name} ${register}           
         fi
+        final_line_1="${file_name},${register}"
+        final_line_1="$(echo ${final_line_1} | cut -d "," -f 1,2,3,4,5,6,7,8,9 )"
+        final_line_2="$(echo "${register}" | head -n ${idx})"
+        final_line_2="$(echo ${final_line_2} | cut -d "," -f 9,10,11,12,13 )"
 
+        # final_line="${final_line_1},${final_line_2}"
+
+        echo "${final_line}" >> ${path_to_sal}/${comercio}.txt
+        cuotas=$(echo "${register}" | cut -d "," -f7)
+        cuotas=$((10#${cuotas}))
+        monto_total=$(echo "${register}" | cut -d "," -f8)
+        fecha_compra=$(echo "${register}" | cut -d "," -f4)
+        if [ cuotas -eq 1 ] ; then
+            reg_salida="000000000000,${monto_total},001,${monto_total},SinPlan,${fecha_compra}"        
+        else 
+            rubro=$(echo "${register}" | cut -d "," -f6)
+            coef_financiacion=$((10#$(grep ${rubro} ${path_to_financiacion} | cut -d "," -f4)))
+            if [ -z coef_financiacion ] ; then
+                reg_salida_sin_interes 
+            fi
+        fi
         idx=$((${idx}+1))
     done
+}
+function reg_salida_sin_interes() {
+    cuota_actual=1
+    monto_por_cuota=$((${monto_total}/${cuotas}))
+    while [ ${cuota_actual} -le ${cuotas} ]
+    do
+        sumar_mes #funcion que suma un mes al mes actual y crea $fecha_cuota
+        reg_salida="000000000000,${monto_total},00${cuota_actual},${monto_por_cuota},SinPlan,${fecha_cuota}"
+    done
+}
+function sumar_mes() {
+    echo ${fecha_compra}
 }
 function filter_bad_file() {
     read file_name
