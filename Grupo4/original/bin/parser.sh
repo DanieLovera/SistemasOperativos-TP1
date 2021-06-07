@@ -150,39 +150,109 @@ function process_registers() {
         fi
         final_line_1="${file_name},${register}"
         final_line_1="$(echo ${final_line_1} | cut -d "," -f 1,2,3,4,5,6,7,8,9 )"
-        final_line_2="$(echo "${register}" | head -n ${idx})"
-        final_line_2="$(echo ${final_line_2} | cut -d "," -f 9,10,11,12,13 )"
-
-        # final_line="${final_line_1},${final_line_2}"
-
-        echo "${final_line}" >> ${path_to_sal}/${comercio}.txt
-        cuotas=$(echo "${register}" | cut -d "," -f7)
-        cuotas=$((10#${cuotas}))
-        monto_total=$(echo "${register}" | cut -d "," -f8)
+        final_line_2="$(echo ${register} | cut -d "," -f 9,10,11,12,13,14 )"
+        cuotas_aux=$(echo "${register}" | cut -d "," -f7)
+        cuotas=$((10#${cuotas_aux}))
+        monto_total=$((10#$(echo "${register}" | cut -d "," -f8)))
         fecha_compra=$(echo "${register}" | cut -d "," -f4)
-        if [ cuotas -eq 1 ] ; then
-            reg_salida="000000000000,${monto_total},001,${monto_total},SinPlan,${fecha_compra}"        
+        if [ ${cuotas} -eq 1 ] ; then
+            reg_salida="000000000000,${monto_total},001,${monto_total},SinPlan,${fecha_compra}" 
+            reg_salida="${final_line_1},${reg_salida},${final_line_2}"
+            echo ${reg_salida} >> ${path_to_sal}/${comercio}.txt
         else 
             rubro=$(echo "${register}" | cut -d "," -f6)
-            coef_financiacion=$((10#$(grep ${rubro} ${path_to_financiacion} | cut -d "," -f4)))
-            if [ -z coef_financiacion ] ; then
-                reg_salida_sin_interes 
+            # coef_financiacion=$(grep ${rubro} ${path_to_financiacion} | cut -d "," -f4)
+            rubro_aux=$(grep ${rubro} ${path_to_financiacion})
+            cuotas_encontradas=$(echo ${rubro_aux}| cut -d "," -f3 | grep "${cuotas_aux}")
+            if [ "${cuotas_encontradas}" == "${cuotas_aux}" ] ; then
+                # "se encontro financiamiento sin chequear tope"
+                tope=$((10#$(echo ${rubro_aux} | grep ${cuotas_aux} | cut -d "," -f5)))
+                if [ ${monto_total} -le ${tope} ] ; then
+                    reg_salida_caso1
+                else
+                    reg_salida_caso2
+                fi
+            else  
+                echo "cuotas con interes"
             fi
+            
         fi
+        reg_salida="${final_line_1},${reg_salida},${final_line_2}"
         idx=$((${idx}+1))
     done
 }
-function reg_salida_sin_interes() {
+function reg_salida_caso2() {
+    cuotas_encontradas=$(grep " ," ${path_to_financiacion} | cut -d "," -f3 | grep "${cuotas_aux}")
+    if [ "${cuotas_encontradas}" == "${cuotas_aux}" ] ; then
+        tope=$(grep " ," "${path_to_financiacion}" | grep "${cuotas_aux}" | cut -d "," -f5)
+        tope=$(echo ${tope} | awk '$0*=1')
+        if [ ${monto_total} -le ${tope} ] ; then
+            coef_financiacion=$(grep " ," ${path_to_financiacion} | grep ",${cuotas_aux}," | cut -d "," -f4)
+            plan="Entidad"
+            echo "estoy en caso2 y el coef es ${coef_financiacion} y las cuotas ${cuotas_aux}"
+            cargar_cuotas_interes
+        else
+            reg_salida_caso3
+        fi
+    else 
+        reg_salida_3
+    fi
+}
+
+function reg_salida_caso1() {
+    coef_financiacion=$(echo ${rubro_aux} | grep ${cuotas_aux} | cut -d "," -f4)
+    plan=$(grep ${rubro} ${path_to_financiacion} | grep ${cuotas_aux} | cut -d "," -f2)
+    echo "estoy en caso1"
+    cargar_cuotas_interes    
+}
+
+function cargar_cuotas_interes() {
+    coef_financiacion=$(bc -l <<< "${coef_financiacion}/10000")
+    coef_financiacion=$(echo ${coef_financiacion} | grep -o '^[0-9].[0-9]\{4\}')
+    echo "el coef vale ${coef_financiacion}"
+    monto_original=${monto_total}
+    echo "el monto original vale ${monto_original}"
+    monto_total=$( bc -l <<< ${monto_original}*${coef_financiacion})
+    monto_total=$(echo ${monto_total} | grep -o '^[0-9]*')
+    echo "el monto total vale ${monto_total}"
+    costo_financiacion=$(bc -l <<< ${monto_total}-${monto_original})
+    costo_financiacion=$(echo ${costo_financiacion} | grep -o '^[0-9]*' )
+    echo "el costo de financiacion vale ${costo_financiacion}"
+    cuota_actual=1
+    monto_por_cuota=$(bc -l <<< "${monto_total}/${cuotas}")
+    monto_por_cuota=$(echo ${monto_por_cuota} | grep -o '^[0-9]*')
+    while [ ${cuota_actual} -le ${cuotas} ]
+    do
+        sumar_mes 
+        reg_salida="${costo_financiacion},${monto_total},00${cuota_actual},${monto_por_cuota},${plan},${fecha_cuota}"
+        reg_salida="${final_line_1},${reg_salida},${final_line_2}"
+        echo "${reg_salida}" >> ${path_to_sal}/${comercio}.txt
+        cuota_actual=$((${cuota_actual}+1))
+    done
+}
+function reg_salida_caso3() {
     cuota_actual=1
     monto_por_cuota=$((${monto_total}/${cuotas}))
     while [ ${cuota_actual} -le ${cuotas} ]
     do
         sumar_mes #funcion que suma un mes al mes actual y crea $fecha_cuota
         reg_salida="000000000000,${monto_total},00${cuota_actual},${monto_por_cuota},SinPlan,${fecha_cuota}"
+        reg_salida="${final_line_1},${reg_salida},${final_line_2}"
+        echo ${reg_salida} >> ${path_to_sal}/${comercio}.txt
+        cuota_actual=$((${cuota_actual}+1))
     done
 }
 function sumar_mes() {
-    echo ${fecha_compra}
+    local mes=$((10#$(echo ${fecha_compra} | cut -c 5-6 )))
+    local dia=$(echo ${fecha_compra} | cut -c 7-8)
+    local anio=$(echo ${fecha_compra} | cut -c 1-4)
+    local suma_mes=$((${cuota_actual}-1))
+    mes=$((${mes}+${suma_mes}))
+    if [ ${mes} -gt 12 ] ; then
+        mes="$((${mes}-12))"
+        anio=$((${anio}+1))
+    fi
+    fecha_cuota="${anio}0${mes}${dia}"
 }
 function filter_bad_file() {
     read file_name
