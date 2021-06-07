@@ -21,7 +21,12 @@ function underline() {
 }
 
 function display_ok() {
-	echo -e "${GREEN}${BOLD}OK${RESET}"
+    local message="OK"
+    if [ -n $1 ]
+    then
+        message="$1"
+    fi
+	echo -e "${GREEN}${BOLD}$message${RESET}"
 }
 
 function error_message() {

@@ -8,7 +8,7 @@ install_log_path="$conf_dir/sotp1.log"
 conf_file_path="$conf_dir/sotp1.conf"
 init_log_path="$conf_dir/soinit.log"
 proc_log_path="$conf_dir/tpcuotas.log"
-confirmed_directories=".confirmed_directories"
+confirmed_directories="$conf_dir/.confirmed_directories"
 
 # Rutas de todos los directorios default.
 exe_dir="$group_dir/bin"
@@ -19,13 +19,11 @@ rejected_files_dir="$group_dir/rechazos"
 lots_dir="$group_dir/lotes"
 results_dir="$group_dir/SALIDATP"
 
-# Lista con los datos del archivo de configuracion final.
-conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir" 
-				  "$news_input_dir" "$rejected_files_dir" "$lots_dir" 
-				  "$results_dir")
+# include conf_utils
+. $(dirname "$0")/conf_utils.sh
 
 # include log
-. $(dirname "$0")/log.sh "sotp1.log"
+. $(dirname "$0")/log.sh "$(dirname "$0")/sotp1.log"
 
 # include pprint
 . $(dirname "$0")/pprint.sh
@@ -63,11 +61,14 @@ function ask_for_dir_input() {
 	log_inf "Defina el nombre del $1 o enter para continuar"
 	echo "... Directorio por defecto: $(underline "$2")"
 	log_inf "... Directorio por defecto: $2"
-	read -p "... " tmp_dir
+	read -p "... $group_dir/" tmp_dir
 	log_inf "... $tmp_dir"
+
 	if [ -z "$tmp_dir" ]
 	then
 		tmp_dir=$2
+	else
+		tmp_dir="$group_dir/$tmp_dir"
 	fi
 }
 
@@ -79,12 +80,13 @@ function ask_for_dir_input() {
 # devolver un string.
 function read_directory() {
 	ask_for_dir_input "$1" "$2"
-	
+
 	local found=$(grep "^${tmp_dir##*/}$" $confirmed_directories)
 	while [ ! -z "${found}" ] 
 	do
-		echo -e $(warning_message "Nombre invalido, directorio reservado/existente.")
+		echo  $(warning_message "Nombre invalido, directorio reservado/existente.")
 		log_war "Nombre invalido, directorio reservado/existente."
+		echo ""
 
 		ask_for_dir_input "$1" "$2"
 
@@ -94,22 +96,20 @@ function read_directory() {
 	echo "${tmp_dir##*/}" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio ${tmp_dir##*/}"
 
-	mkdir "${tmp_dir}"
-
-	tmp_dir=$(find "$(cd ../..; pwd)" -type d -name "${tmp_dir##*/}")
-
-	rm -r "${tmp_dir}"
-
-	read -p "wait" tmp_dir
-
+	echo $(success_message "Quedó configurado el $(bold "$1") en $(underline "$tmp_dir")")
+	echo ""
+	log_inf "Quedó configurado el $1 en $tmp_dir"
 }
 
 # Crea un directorio
 # @param $1: mensaje del directorio creado.
 # @param $2: ruta de directorio que se va a crear.
 function make_directory() {
-	mkdir "$2"
-	echo -e "$1 creado en: $2"
+	# TODO: en caso de que exista borrarla?
+	# rm -r "$2"
+
+	mkdir -p "$2"
+	echo -e $(info_message "$(bold "$1") creado en: $(underline "$2")")
 	log_inf "$1 creado en: $2"
 }
 
@@ -118,7 +118,7 @@ function make_directory() {
 # @param $2: ruta de archivo que se va a crear.
 function touch_file() {
 	touch "$2"
-	echo -e "$1 creado en: $2"
+	echo $(info_message "$(bold "$1") creado en: $(underline "$2")")
 	log_inf "$1 creado en: $2"
 }
 
@@ -137,20 +137,22 @@ function copy_from_to() {
 # o 0 en caso contrario.
 function read_confirmation_response() {
 	local user_response=""
-	read -p "¿Confirma la $(echo $1 | tr '[:upper:]' '[:lower:]')? (SI/NO): " user_response
-	log_inf "¿Confirma la $(echo $1 | tr '[:upper:]' '[:lower:]')? (SI/NO): "
+	read -p "¿Confirma la ${1,,}? ($(bold "SI/NO")): " user_response
+	log_inf "¿Confirma la ${1,,}? (SI/NO): "
 	user_response=$(echo ${user_response} | tr '[:upper:]' '[:lower:]')
-	log_inf "${user_response}"
-	if [ "${user_response}" = "si" ]
+
+	log_inf "Respuesta del usuario ${user_response}"
+
+	if [[ " si s yes y  " =~ " ${user_response} " ]]
 	then 
 		return 1;
-	elif [ "${user_response}" = "no" ]
+	elif [[ " no n " =~ " ${user_response} " ]]
 	then
 		return 0;
 	else 
-		echo "Opcion invalida, por favor vuelva a intentar."
-		log_war "Opcion invalida, por favor vuelva a intentar."
-		read_confirmation_response
+		echo $(warning_message "Opción inválida, por favor vuelva a intentar.")
+		log_war "Opción inválida, por favor vuelva a intentar."
+		read_confirmation_response $1
 	fi
 }
 
@@ -160,63 +162,67 @@ function read_confirmation_response() {
 # @return $?: devuelve un 1 en caso de que la operacion sea confirmada
 # o 0 en caso contrario.
 function confirm_operation() {
-	echo " "
-	echo "TP1 SO7508 Cuatrimestre I 2021 Curso Martes Grupo4"
+	echo ""
+	echo -e "\t $(bold "TP1 SO7508 Cuatrimestre I 2021 Curso Martes Grupo4")"
 	log_inf "TP1 SO7508 Cuatrimestre I 2021 Curso Martes Grupo4"
-	echo "Tipo de proceso:                          $1"
+	echo ""
+	echo -e "\t Tipo de proceso:                          $(bold "$1")"
 	log_inf "Tipo de proceso:                          $1"
-	echo "Directorio padre:                         ${conf_directories[0]}"
+	echo -e "\t Directorio padre:                         $(bold "${conf_directories[0]}")"
 	log_inf "Directorio padre:                         ${conf_directories[0]}"
-	echo "Ubicación script de instalacion:          ${install_script_path}"
+	echo -e "\t Ubicación script de instalacion:          $(bold "${install_script_path}")"
 	log_inf "Ubicación script de instalacion:          ${install_script_path}"
-	echo "Log de la instalacion:                    ${install_log_path}"
+	echo -e "\t Log de la instalacion:                    $(bold "${install_log_path}")"
 	log_inf "Log de la instalacion:                    ${install_log_path}"
-	echo "Archivo de configuracion:                 ${conf_directories[1]}"
+	echo -e "\t Archivo de configuracion:                 $(bold "${conf_directories[1]}")"
 	log_inf "Archivo de configuracion:                 ${conf_directories[1]}"
-	echo "Log de inicializacion:                    ${init_log_path}"
+	echo -e "\t Log de inicializacion:                    $(bold "${init_log_path}")"
 	log_inf "Log de inicializacion:                    ${init_log_path}"
-	echo "Log del proceso principal:                ${proc_log_path}"
+	echo -e "\t Log del proceso principal:                $(bold "${proc_log_path}")"
 	log_inf "Log del proceso principal:                ${proc_log_path}"
-	echo "Directorio de ejecutables:                ${conf_directories[2]}"
+	echo -e "\t Directorio de ejecutables:                $(bold "${conf_directories[2]}")"
 	log_inf "Directorio de ejecutables:                ${conf_directories[2]}"
-	echo "Directorio de tablas maestras:            ${conf_directories[3]}"
+	echo -e "\t Directorio de tablas maestras:            $(bold "${conf_directories[3]}")"
 	log_inf "Directorio de tablas maestras:            ${conf_directories[3]}"
-	echo "Directorio de novedades:                  ${conf_directories[4]}"
+	echo -e "\t Directorio de novedades:                  $(bold "${conf_directories[4]}")"
 	log_inf "Directorio de novedades:                  ${conf_directories[4]}"
-	echo "Directorio de novedades aceptadas:        ${news_input_ok_dir}"
+	echo -e "\t Directorio de novedades aceptadas:        $(bold "${news_input_ok_dir}")"
 	log_inf "Directorio de novedades aceptadas:        ${news_input_ok_dir}"
-	echo "Directorio de rechazados:                 ${conf_directories[5]}"
+	echo -e "\t Directorio de rechazados:                 $(bold "${conf_directories[5]}")"
 	log_inf "Directorio de rechazados:                 ${conf_directories[5]}"
-	echo "Directorio de lotes procesados:           ${conf_directories[6]}"
+	echo -e "\t Directorio de lotes procesados:           $(bold "${conf_directories[6]}")"
 	log_inf "Directorio de lotes procesados:           ${conf_directories[6]}"
-	echo "Directorio de liquidaciones:              ${conf_directories[7]}"
+	echo -e "\t Directorio de liquidaciones:              $(bold "${conf_directories[7]}")"
 	log_inf "Directorio de liquidaciones:              ${conf_directories[7]}"
-	echo "Estado de la $(echo $1 | tr '[:upper:]' '[:lower:]'):                 LISTA"
-	log_inf "Estado de la $(echo $1 | tr '[:upper:]' '[:lower:]'):                 LISTA"
+	echo -e "\t Estado de la ${1,,}:                 $(display_ok "LISTA")"
+	log_inf "Estado de la ${1,,}:                 LISTA"
+
+	echo ""
+
 	read_confirmation_response $1
 	return $?
 }
 
 # Inicializa el archivo de configuracion del sistema.
 function make_conf_file() {
-	touch_file "Archivo de configuracion" "${conf_file_path}"
-	echo "GRUPO-${conf_directories[0]}" >> "${conf_file_path}"
+	touch_file "Archivo de configuracion" "$conf_file_path"
+	echo "GRUPO-${conf_directories[0]}" >> "$conf_file_path"
 	log_inf "GRUPO ${conf_directories[0]}"
-	echo "DIRCONF-${conf_directories[1]%/*}" >> "${conf_file_path}"
+	echo "DIRCONF-${conf_directories[1]%/*}" >> "$conf_file_path"
 	log_inf "DIRCONF ${conf_directories[1]%/*}"
-	echo "DIRBIN-${conf_directories[2]}" >> "${conf_file_path}"
+	echo "DIRBIN-${conf_directories[2]}" >> "$conf_file_path"
 	log_inf "DIRBIN ${conf_directories[2]}"
-	echo "DIRMAE-${conf_directories[3]}" >> "${conf_file_path}"
+	echo "DIRMAE-${conf_directories[3]}" >> "$conf_file_path"
 	log_inf "DIRMAE ${conf_directories[3]}"
-	echo "DIRENT-${conf_directories[4]}" >> "${conf_file_path}"
+	echo "DIRENT-${conf_directories[4]}" >> "$conf_file_path"
 	log_inf "DIRENT ${conf_directories[4]}"
-	echo "DIRRECH-${conf_directories[5]}" >> "${conf_file_path}"
+	echo "DIRRECH-${conf_directories[5]}" >> "$conf_file_path"
 	log_inf "DIRRECH ${conf_directories[5]}"
-	echo "DIRPROC-${conf_directories[6]}" >> "${conf_file_path}"
+	echo "DIRPROC-${conf_directories[6]}" >> "$conf_file_path"
 	log_inf "DIRPROC ${conf_directories[6]}"
-	echo "DIRSAL-${conf_directories[7]}" >> "${conf_file_path}"
+	echo "DIRSAL-${conf_directories[7]}" >> "$conf_file_path"
 	log_inf "DIRSAL ${conf_directories[7]}"
-	echo "INSTALACION-$(date '+%d/%m/%Y %H:%M:%S')-$(whoami)" >> "${conf_file_path}"
+	echo "INSTALACION-$(date '+%d/%m/%Y %H:%M:%S')-$(whoami)" >> "$conf_file_path"
 	log_inf "INSTALACION $(date '+%d/%m/%Y %H:%M:%S') $(whoami)"
 }
 
@@ -225,7 +231,7 @@ function make_files() {
 	#touch_file "Script de instalacion" ${install_script_path}
 	#touch_file "Log de la instalacion" ${install_log_path}
 	make_conf_file
-	touch_file "Log de inicializacion" "${init_log_path}"
+	touch_file "Log de inicialización" "${init_log_path}"
 	touch_file "Log del proceso principal" "${proc_log_path}"
 }
 
@@ -240,8 +246,8 @@ function make_exe_dir() {
 # del directorio original.
 function make_sys_tables_dir() {
 	make_directory "Directorio de tablas del sistema" "${conf_directories[3]}"
-	copy_from_to "../original/financiacion.txt" "${conf_directories[3]}"
-	copy_from_to "../original/terminales.txt" "${conf_directories[3]}"
+	copy_from_to "$group_dir/original/financiacion.txt" "${conf_directories[3]}"
+	copy_from_to "$group_dir/original/terminales.txt" "${conf_directories[3]}"
 }
 
 # Crea los directorios del sistema.
@@ -257,7 +263,7 @@ function make_directories() {
 
 # Construye archivos y directorios del sistema.
 function make_all() {
-	echo " "
+	echo ""
 	make_files
 	make_directories
 }
@@ -265,102 +271,101 @@ function make_all() {
 # Instala el sistema.
 function install() {
 	make_confirmed_directories_names
-	echo -e "Comenzando instalacion del sistema...\n"
+	echo $(info_message "Comenzando instalacion del sistema...")
 	log_inf "Comenzando instalacion del sistema..."
-	
+	echo ""
+
 	read_directory "directorio de ejecutables" "${conf_directories[2]}"
-	conf_directories[2]=${tmp_dir}
+	conf_directories[2]=$tmp_dir
 	log_inf "directorio de ejecutables ${conf_directories[2]}"
 
 	read_directory "directorio de tablas del sistema" "${conf_directories[3]}"
-	conf_directories[3]=${tmp_dir}
+	conf_directories[3]=$tmp_dir
 	log_inf "directorio de tablas del sistema ${conf_directories[3]}"
 
 	read_directory "directorio de novedades" "${conf_directories[4]}"
-	conf_directories[4]=${tmp_dir}
+	conf_directories[4]=$tmp_dir
 	log_inf "directorio de novedades ${conf_directories[4]}"
-	news_input_ok_dir="${tmp_dir}/ok"
+	news_input_ok_dir="$tmp_dir/ok"
 	log_inf "directorio de novedades/ok ${news_input_ok_dir}"
 
 	read_directory "directorio de archivos rechazados" "${conf_directories[5]}"
-	conf_directories[5]=${tmp_dir}
+	conf_directories[5]=$tmp_dir
 	log_inf "directorio de archivos rechazados ${conf_directories[5]}"
 
 	read_directory "directorio de lotes procesados" "${conf_directories[6]}"
-	conf_directories[6]=${tmp_dir}
+	conf_directories[6]=$tmp_dir
 	log_inf "directorio de lotes procesados ${conf_directories[6]}"		
 
 	read_directory "directorio de resultados" "${conf_directories[7]}"
-	conf_directories[7]=${tmp_dir}	
+	conf_directories[7]=$tmp_dir	
 	log_inf "directorio de resultados ${conf_directories[7]}"		
 
-	confirm_operation "INSTALACION"
+	confirm_operation "INSTALACIÓN"
 	if [ $? -eq 1 ]
 	then
 		make_all
 	else
-		echo "Ha ingresado NO, por favor defina los directorios principales."
+		echo $(info_message "Ha ingresado NO, por favor defina los directorios principales.")
 		log_inf "Ha ingresado NO, por favor defina los directorios principales."
 		install
 	fi
 }
 
 # Carga el archivo de configuracion a memoria en un array.
-function load_conf_directories() {
-	local backIFS=$IFS
-	local counter=0
-	while IFS='' read -r line || [[ -n "${line}" ]]
-	do
-		local path=$(echo "${line}" | sed s/^.*-//)
-		if [ ${path} != $(whoami) ]
-		then
-			conf_directories[counter]=$(echo "${line}" | sed s/^.*-//)
-			counter=$((${counter} + 1))
-		fi
-	done < $1
-	IFS=$backIFS
-	news_input_ok_dir="${conf_directories[4]}/ok"
-}
+# function load_conf_directories() {
+# 	local backIFS=$IFS # TODO: Creo que es una mala práctica
+# 	local counter=0
+# 	while IFS='' read -r line || [[ -n "${line}" ]]
+# 	do
+# 		local path=$(echo "${line}" | sed s/^.*-//)
+# 		if [ ${path} != $(whoami) ]
+# 		then
+# 			conf_directories[counter]=$(echo "${line}" | sed s/^.*-//)
+# 			counter=$((${counter} + 1))
+# 		fi
+# 	done < $1
+# 	IFS=$backIFS
+# }
+
+
 
 # Comprueba si hay un directorio faltante
 # @return Devuelve 1 en caso de que falte un directorio
 # principal y 0 en caso contrario.
-function is_missing_directory() {
-	for directory in "${conf_directories[@]}"
-	do
-    	if [[ ! -d "${directory}" || ! -d "${news_input_ok_dir}" ]] 
-    	then
-       		return 1
-    	fi
-	done
-	return 0
-}
+# function is_missing_directory() {
+# 	for directory in "${conf_directories[@]}"
+# 	do
+#     	if [[ ! -d "${directory}" || ! -d "${news_input_ok_dir}" ]] 
+#     	then
+#        		return 1
+#     	fi
+# 	done
+# 	return 0
+# }
 
 # Comprueba si hay un archivo de instalacion faltante
 # @return Devuelve 1 en caso de que falte un archivo
 # principal y 0 en caso contrario.
-function is_missing_file() {
-	# ACA TAMBIEN HAY QUE AGREGAR REVISAR LOS BINARIOS DEL PASO 5
-	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
-		  !	-f "${conf_directories[3]}/terminales.txt" ]]
-	then
-		return 1
-	fi
-	return 0
-}
+# function is_missing_file() {
+# 	# ACA TAMBIEN HAY QUE AGREGAR REVISAR LOS BINARIOS DEL PASO 5
+# 	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
+# 		  !	-f "${conf_directories[3]}/terminales.txt" ]]
+# 	then
+# 		return 1
+# 	fi
+# 	return 0
+# }
 
 # Finalizacion del script en caso de que ya este instalado
 # y no haya que reparar.
-function exit() {
-	echo "El sistema ya se encuentra instalado."
+function exit_on_success() {
+	echo $(info_message "El sistema ya se encuentra instalado.")
 	log_inf "El sistema ya se encuentra instalado."
-	local backIFS=$IFS
-	while IFS='' read -r line || [[ -n "${line}" ]]
-	do
-		echo "${line}"
-		log_inf "${line}"
-	done < ${conf_file_path}
-	IFS=$backIFS
+	echo ""
+	echo $(info_message "Archivo de configuración $(bold "$conf_file_path")")
+	cat $conf_file_path | sed 's/^/\t/'
+	cat $conf_file_path | while read -r; do log_inf $REPLY; done
 }
 
 # Repara el directorio de ejecucion (bin)
@@ -545,7 +550,7 @@ function system_check() {
 function repair() {
 	echo "Sistema dañado, se procede a rutina de reparacion..."
 	log_inf "Sistema dañado, se procede a rutina de reparacion..."
-	confirm_operation "REPARACION"
+	confirm_operation "REPARACIÓN"
 	
 	if [ $? -eq 1 ]
 	then
@@ -554,8 +559,8 @@ function repair() {
 		then
 			echo "Estado de la reparacion:                     REPARADO"
 			log_inf "Estado de la reparacion:                     REPARADO"	
-			sed -i "/^REPARACION/d" "${conf_file_path}"
-			echo "REPARACION-$(date '+%d/%m/%Y %H:%M:%S')-$(whoami)" >> "${conf_file_path}"
+			sed -i "/^REPARACION/d" "$conf_file_path"
+			echo "REPARACION-$(date '+%d/%m/%Y %H:%M:%S')-$(whoami)" >> "$conf_file_path"
 			log_inf "REPARACION $(date '+%d/%m/%Y %H:%M:%S') $(whoami)"
 		else
 			echo "Estado de la reparacion:                     FALLIDA"
@@ -570,26 +575,25 @@ function repair() {
 
 # Ejecuta el script.
 function run() {
-	if [ ! -f "${conf_file_path}" ]
+	if [ ! -f "$conf_file_path" ]
 	then
-		echo "Iniciando sistema..."
+		echo $(info_message "Iniciando sistema...")
 		log_inf "Iniciando sistema..."
+
 		install
 		remove_confirmed_directories_names
-		echo "Estado de la instalación:                     COMPLETADA"
+
+		echo ""
+		echo "$(success_message "Estado de la instalación:                     $(display_ok "COMPLETADA")")"
 		log_inf "Estado de la instalación:                     COMPLETADA"
 	else
-		load_conf_directories "${conf_file_path}"
-		is_missing_directory
-		local missing_directory_status=$?
-		is_missing_file
-		local missing_file_status=$?
+		check_system
 
-		if [[ ${missing_directory_status} -eq 1 || ${missing_file_status} -eq 1 ]]
+		if [[ $? -ne 0 ]]
 		then
 			repair
 		else
-			exit "${conf_file_path}"
+			exit_on_success "$conf_file_path"
 		fi
 	fi
 }
