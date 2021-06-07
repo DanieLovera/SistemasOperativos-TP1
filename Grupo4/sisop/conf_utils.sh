@@ -7,7 +7,7 @@ CONFIG_ARG_LEN=8
 function check_install_script() {
 	if [ -f "${install_script_path}" ]
 	then
-		echo $(info_message "Proceda a ejecutar el comando $(bold "bash ${install_script_path}") para instalar el sistema.")
+		echo $(info_message "Proceda a ejecutar el comando $(bold "bash $(echo "$install_script_path" | sed "s-^$(pwd)/--")") para instalar el sistema.")
 		log_inf "Proceda a ejecutar bash ${install_script_path}"
 	else
 		echo $(error_message "No se encontró el archivo $(bold "$install_script_path")")

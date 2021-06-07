@@ -1,15 +1,21 @@
 #!/bin/bash
+# Como este scrip se tiene que ejecutar con `source` o con `. <script>`
+# no se puede usar $0.
+function real_path() {
+	echo $(dirname $(realpath ${BASH_SOURCE[0]}))
+}
+
 # include pprint
-. $(dirname "$0")/pprint.sh
+. "$(real_path)/pprint.sh"
 
 # include log
-. $(dirname "$0")/log.sh "$(dirname "$0")/soinit.log"
+. "$(real_path)/log.sh" "$(real_path)/soinit.log"
 
-conf_file_path="$(dirname "$0")/sotp1.conf"
-install_script_path="$(dirname "$0")/sotp1.sh"
+conf_file_path="$(real_path)/sotp1.conf"
+install_script_path="$(real_path)/sotp1.sh"
 
 # include conf_utils
-. $(dirname "$0")/conf_utils.sh
+. "$(real_path)/conf_utils.sh"
 
 # @return 0 en caso de que el entorno coincida con la configuración del
 # archivo de configuración, 1 en caso contrario.

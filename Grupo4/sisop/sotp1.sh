@@ -20,13 +20,13 @@ lots_dir="$group_dir/lotes"
 results_dir="$group_dir/SALIDATP"
 
 # include conf_utils
-. $(dirname "$0")/conf_utils.sh
+. "$conf_dir/conf_utils.sh"
 
 # include log
-. $(dirname "$0")/log.sh "$(dirname "$0")/sotp1.log"
+. "$conf_dir/log.sh" "$conf_dir/sotp1.log"
 
 # include pprint
-. $(dirname "$0")/pprint.sh
+. "$conf_dir/pprint.sh"
 
 
 # Agrega los nombres de directorios principales a un archivo
