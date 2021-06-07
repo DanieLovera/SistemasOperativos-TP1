@@ -1,67 +1,74 @@
 #!/bin/bash
 
 # Rutas de todos los archivos default creados.
-group_dir=$(dirname $(pwd))
-install_script_path=$(pwd | sed 's-$-/sotp1.sh-')
-install_log_path=$(pwd | sed 's-$-/sotp1.log-')
-conf_file_path=$(pwd | sed 's-$-/sotp1.conf-')
-init_log_path=$(pwd | sed 's-$-/soinit.log-')
-proc_log_path=$(pwd | sed 's-$-/tpcuotas.log-')
+conf_dir=$(dirname $(realpath $0))
+group_dir=$(dirname $conf_dir)
+install_script_path="$conf_dir/sotp1.sh"
+install_log_path="$conf_dir/sotp1.log"
+conf_file_path="$conf_dir/sotp1.conf"
+init_log_path="$conf_dir/soinit.log"
+proc_log_path="$conf_dir/tpcuotas.log"
 confirmed_directories=".confirmed_directories"
 
 # Rutas de todos los directorios default.
-exe_dir=$(pwd | sed 's-/sisop$-/bin-')
-sys_tables_dir=$(pwd | sed 's-/sisop$-/master-')
-news_input_dir=$(pwd | sed 's-/sisop$-/ENTRADATP-')
-news_input_ok_dir=$(pwd | sed 's-/sisop$-/ENTRADATP/ok-')
-rejected_files_dir=$(pwd | sed 's-/sisop$-/rechazos-')
-lots_dir=$(pwd | sed 's-/sisop$-/lotes-')
-results_dir=$(pwd | sed 's-/sisop$-/SALIDATP-')
+exe_dir="$group_dir/bin"
+sys_tables_dir="$group_dir/master"
+news_input_dir="$group_dir/ENTRADATP"
+news_input_ok_dir="$group_dir/ENTRADATP/ok"
+rejected_files_dir="$group_dir/rechazos"
+lots_dir="$group_dir/lotes"
+results_dir="$group_dir/SALIDATP"
 
 # Lista con los datos del archivo de configuracion final.
-conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir" "$news_input_dir" "$rejected_files_dir" "$lots_dir" "$results_dir")
+conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir" 
+				  "$news_input_dir" "$rejected_files_dir" "$lots_dir" 
+				  "$results_dir")
 
-# Loggea INF a sotp1.log
-# @param $1: mensaje que se adjuntara en el log.
-function log_inf() {
-	echo "INF-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> sotp1.log
-}
+# include log
+. $(dirname "$0")/log.sh "sotp1.log"
 
-# Loggea WAR a sotp1.log
-# @param $1: mensaje que se adjuntara en el log.
-function log_war() {
-	echo "WAR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> sotp1.log
-}
+# include pprint
+. $(dirname "$0")/pprint.sh
 
-# Loggea ERR a sotp1.log
-# @param $1: mensaje que se adjuntara en el log.
-function log_err() {
-	echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> sotp1.log
-}
 
 # Agrega los nombres de directorios principales a un archivo
 # oculto con la lista de nombres que el usuario no puede elegir.
 function make_confirmed_directories_names() {
-	echo "${group_dir##*/}" > "${confirmed_directories}"
-	log_inf "Creando archivo ${confirmed_directories}"
+	echo "${group_dir##*/}" > "$confirmed_directories"
+	log_inf "Creando archivo $confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio ${group_dir##*/}"
-	echo "sisop" >> "${confirmed_directories}"
+	echo "sisop" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio sisop"
-	echo "original" >> "${confirmed_directories}"
+	echo "original" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio original"
-	echo "tp1datos" >> "${confirmed_directories}"
+	echo "tp1datos" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio tp1datos"
-	echo "misdatos" >> "${confirmed_directories}"
+	echo "misdatos" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio misdatos"
-	echo "mispruebas" >> "${confirmed_directories}"
+	echo "mispruebas" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio mispruebas"
 }
 
 # Remueve el archivo oculto creado para recordar los nombres
 # de archivos que el usuario no puede elegir.
 function remove_confirmed_directories_names() {
-	rm "${confirmed_directories}"
-	log_inf "Removiendo archivo ${confirmed_directories}"
+	rm "$confirmed_directories"
+	log_inf "Removiendo archivo $confirmed_directories"
+}
+
+# @return tmp_dir: se retorna como variable global necesaria para 
+# devolver un string.
+function ask_for_dir_input() {
+	echo -e $(info_message "Defina el nombre del $(bold "$1") o $(bold "enter") para continuar")
+	log_inf "Defina el nombre del $1 o enter para continuar"
+	echo "... Directorio por defecto: $(underline "$2")"
+	log_inf "... Directorio por defecto: $2"
+	read -p "... " tmp_dir
+	log_inf "... $tmp_dir"
+	if [ -z "$tmp_dir" ]
+	then
+		tmp_dir=$2
+	fi
 }
 
 # Lee algun directorio de entrada del usuario.
@@ -71,39 +78,30 @@ function remove_confirmed_directories_names() {
 # @return tmp_dir: se retorna como variable global necesaria para 
 # devolver un string.
 function read_directory() {
-	echo "- Defina el nombre del $1 o presione enter para"
-	log_inf "Defina el nombre del $1 o presione enter para"
-	read -p "continuar [directorio por defecto $2]: " tmp_dir
-	log_inf "continuar [directorio por defecto $2]: ${tmp_dir}"
-
-	if [ -z "${tmp_dir}" ]
-	then
-		tmp_dir=$2
-	fi
-
-	local found=$(grep "^${tmp_dir##*/}$" ${confirmed_directories})
+	ask_for_dir_input "$1" "$2"
+	
+	local found=$(grep "^${tmp_dir##*/}$" $confirmed_directories)
 	while [ ! -z "${found}" ] 
 	do
-		echo -e "\nNombre invalido, directorio reservado/existente."
+		echo -e $(warning_message "Nombre invalido, directorio reservado/existente.")
 		log_war "Nombre invalido, directorio reservado/existente."
-		echo "- Defina el nombre del $1 o presione enter para"
-		log_war "Defina el nombre del $1 o presione enter para"
-		read -p "continuar [directorio por defecto $2]: " tmp_dir
-		log_war "continuar [directorio por defecto $2]: ${tmp_dir}"
 
-		if [ -z "${tmp_dir}" ]
-		then
-			tmp_dir=$2
-		fi
-		found=$(grep "^${tmp_dir##*/}$" ${confirmed_directories})
+		ask_for_dir_input "$1" "$2"
+
+		found=$(grep "^${tmp_dir##*/}$" $confirmed_directories)
 	done
 
-	echo "${tmp_dir##*/}" >> "${confirmed_directories}"
+	echo "${tmp_dir##*/}" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio ${tmp_dir##*/}"
 
 	mkdir "${tmp_dir}"
+
 	tmp_dir=$(find "$(cd ../..; pwd)" -type d -name "${tmp_dir##*/}")
+
 	rm -r "${tmp_dir}"
+
+	read -p "wait" tmp_dir
+
 }
 
 # Crea un directorio

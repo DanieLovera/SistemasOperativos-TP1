@@ -14,10 +14,6 @@ conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir"
 				  "$results_dir")
 CONFIG_ARG_LEN=8
 
-# function log() {
-# 	echo "$1-$(date "+%d/%m/%Y %H:%M:%S")-$2-$(whoami)" >> soinit.log
-# }
-
 function check_install_script() {
 	if [ -f "${install_script_path}" ]
 	then
@@ -256,6 +252,8 @@ function check_installation() {
 		check_permissions
 		if [ $? -ne 0 ]
 		then
+			echo $(error_message "No se tienen permisos en los archivos")
+			log_err "No se tienen permisos de lectura en los archivos"
 			return 1
 		fi
 	fi
@@ -282,7 +280,7 @@ function run() {
 	else
 		check_install_script
 	fi
-	
+
 	# TODO: Falta invocar el proceso principal
 }
 
