@@ -4,11 +4,15 @@ conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir"
 				  "$results_dir")
 CONFIG_ARG_LEN=8
 
+function install_warning_message() {
+	echo $(warning_message "Proceda a ejecutar el comando $(bold "bash $(echo "$install_script_path" | sed "s-^$(pwd)/--")") para instalar el sistema.")
+	log_war "Proceda a ejecutar bash ${install_script_path}"
+}
+
 function check_install_script() {
 	if [ -f "${install_script_path}" ]
 	then
-		echo $(info_message "Proceda a ejecutar el comando $(bold "bash $(echo "$install_script_path" | sed "s-^$(pwd)/--")") para instalar el sistema.")
-		log_inf "Proceda a ejecutar bash ${install_script_path}"
+		install_warning_message
 	else
 		echo $(error_message "No se encontró el archivo $(bold "$install_script_path")")
 		log_err "No se encontró el archivo ${install_script_path}"

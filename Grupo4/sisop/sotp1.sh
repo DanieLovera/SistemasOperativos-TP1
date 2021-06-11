@@ -3,6 +3,7 @@
 # Rutas de todos los archivos default creados.
 conf_dir=$(dirname $(realpath $0))
 group_dir=$(dirname $conf_dir)
+original_dir="$group_dir/original"
 install_script_path="$conf_dir/sotp1.sh"
 install_log_path="$conf_dir/sotp1.log"
 conf_file_path="$conf_dir/sotp1.conf"
@@ -129,6 +130,13 @@ function copy_from_to() {
 	cp "$1" "$2"
 	log_inf "Copiando $1 a $2"
 }
+# Copia recursivamente de una carpeta a otra
+# @param $1: Carpeta origen
+# @param $2: Carpeta destino
+function copy_rec_from_to() {
+	cp -a "$1/." "$2"
+	log_inf "Copiando directorio $1 a $2"
+}
 
 # Lee la respuesta de confirmacion del usuario
 # @param $1: recibe INSTALACION si la operacion que se realizara
@@ -240,6 +248,7 @@ function make_files() {
 function make_exe_dir() {
 	make_directory "Directorio de ejecutables" "${conf_directories[2]}"
 	# COPIAR ACA LOS EJECUTABLES CUANDO ESTEN DEL PASO 5.
+	copy_rec_from_to "$group_dir/original/bin" "$exe_dir" 
 }
 
 # Crea el directorio maestro (del sistema) y copia las tablas maestras
@@ -301,7 +310,7 @@ function install() {
 	conf_directories[7]=$tmp_dir	
 	log_inf "directorio de resultados ${conf_directories[7]}"		
 
-	confirm_operation "INSTALACIÓN"
+	confirm_operation "INSTALACION"
 	if [ $? -eq 1 ]
 	then
 		make_all
@@ -311,51 +320,6 @@ function install() {
 		install
 	fi
 }
-
-# Carga el archivo de configuracion a memoria en un array.
-# function load_conf_directories() {
-# 	local backIFS=$IFS # TODO: Creo que es una mala práctica
-# 	local counter=0
-# 	while IFS='' read -r line || [[ -n "${line}" ]]
-# 	do
-# 		local path=$(echo "${line}" | sed s/^.*-//)
-# 		if [ ${path} != $(whoami) ]
-# 		then
-# 			conf_directories[counter]=$(echo "${line}" | sed s/^.*-//)
-# 			counter=$((${counter} + 1))
-# 		fi
-# 	done < $1
-# 	IFS=$backIFS
-# }
-
-
-
-# Comprueba si hay un directorio faltante
-# @return Devuelve 1 en caso de que falte un directorio
-# principal y 0 en caso contrario.
-# function is_missing_directory() {
-# 	for directory in "${conf_directories[@]}"
-# 	do
-#     	if [[ ! -d "${directory}" || ! -d "${news_input_ok_dir}" ]] 
-#     	then
-#        		return 1
-#     	fi
-# 	done
-# 	return 0
-# }
-
-# Comprueba si hay un archivo de instalacion faltante
-# @return Devuelve 1 en caso de que falte un archivo
-# principal y 0 en caso contrario.
-# function is_missing_file() {
-# 	# ACA TAMBIEN HAY QUE AGREGAR REVISAR LOS BINARIOS DEL PASO 5
-# 	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
-# 		  !	-f "${conf_directories[3]}/terminales.txt" ]]
-# 	then
-# 		return 1
-# 	fi
-# 	return 0
-# }
 
 # Finalizacion del script en caso de que ya este instalado
 # y no haya que reparar.
@@ -373,12 +337,12 @@ function repair_exe() {
 	local repaired=1
 	if [ ! -d "${conf_directories[2]}" ]
 	then
-		echo " "
-		echo "Reparando ${conf_directories[2]}..."
+		echo ""
+		echo $(info_message "Reparando $(underline ${conf_directories[2]})...")
 		log_inf "Reparando ${conf_directories[2]}..."
 		make_exe_dir
 		# FALTA CORROBORAR QUE NO SE ELIMINARAN LOS BIN DE ORIGINAL
-		echo "Reparado ${conf_directories[2]}"
+		echo $(success_message "Reparado $(underline ${conf_directories[2]})")
 		log_inf "Reparado ${conf_directories[2]}"
 	#else
 		# CASO EN QUE ESTE EL DIRECTORIO BIN
@@ -395,19 +359,19 @@ function repair_sys_table() {
 	if [ ! -d "${conf_directories[3]}" ]
 	then
 		echo " "
-		echo "Reparando ${conf_directories[3]}..."
+		echo $(info_message "Reparando $(underline ${conf_directories[3]})...")
 		log_inf "Reparando ${conf_directories[3]}..."
-		if [[ -d "${conf_directories[0]}/original" &&\
-			  -f "${conf_directories[0]}/original/financiacion.txt" &&\
-			  -f "${conf_directories[0]}/original/terminales.txt" ]] 
+		if [[ -d "${conf_directories[0]}/original" && \
+			  -f "${conf_directories[0]}/original/financiacion.txt" && \
+			  -f "${conf_directories[0]}/original/terminales.txt" ]]
 		then 
 			make_sys_tables_dir
-			echo "Reparado ${conf_directories[3]}"
+			echo $(success_message "Reparado $(underline ${conf_directories[3]})")
 			log_inf "Reparado ${conf_directories[3]}"
 		else		
-			echo "Fallo la reparacion de las tablas maestras"
-			log_err "Fallo la reparacion de las tablas maestras"
-			echo "Comprobrar la existencia de: "
+			echo $(error_message "Fallo la reparación de las tablas maestras")
+			log_err "Fallo la reparación de las tablas maestras"
+			echo $(info_message "Comprobrar la existencia de: ")
 			log_err "Comprobrar la existencia de: "
 			echo -e "\t-${conf_directories[0]}/original"
 			log_err "-${conf_directories[0]}/original"
@@ -423,19 +387,19 @@ function repair_sys_table() {
 		if [ ! -f "${conf_directories[3]}/financiacion.txt" ]
 		then
 			echo " "
-			echo "Reparando ${conf_directories[3]}/financiacion.txt..."
+			echo $(info_message "Reparando ${conf_directories[3]}/financiacion.txt...")
 			log_inf "Reparando ${conf_directories[3]}/financiacion.txt]..."
 			if [ -f "${conf_directories[0]}/original/financiacion.txt" ]
 			then
-				copy_from_to "../original/financiacion.txt" "${conf_directories[3]}"
-				echo "Reparado ${conf_directories[3]}/financiacion.txt"
+				copy_from_to "$original_dir/financiacion.txt" "${conf_directories[3]}"
+				echo $(success_message "Reparado ${conf_directories[3]}/financiacion.txt")
 				log_inf "Reparado ${conf_directories[3]}/financiacion.txt]"
 			else
-				echo "Fallo la reparacion de ${conf_directories[3]}/financiacion.txt"
-				log_err "Fallo la reparacion de ${conf_directories[3]}/financiacion.txt"
-				echo "No se pudo encontrar el archivo ${conf_directories[0]}/original/financiacion.txt"
+				echo $(error_message "Fallo la reparación de ${conf_directories[3]}/financiacion.txt")
+				log_err "Fallo la reparación de ${conf_directories[3]}/financiacion.txt"
+				echo $(error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/financiacion.txt")
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/financiacion.txt"
-				echo "Para corregir el error se debe descargar el archivo faltante de github"
+				echo $(info_message "Para corregir el error se debe descargar el archivo faltante de github")
 				log_err "Para corregir el error se debe descargar el archivo faltante de github"
 				repaired=0
 			fi
@@ -444,19 +408,19 @@ function repair_sys_table() {
 		if [ ! -f "${conf_directories[3]}/terminales.txt" ]
 		then
 			echo " "
-			echo "Reparando ${conf_directories[3]}/terminales.txt..."
+			echo $(info_message "Reparando ${conf_directories[3]}/terminales.txt...")
 			log_inf "Reparando ${conf_directories[3]}/terminales.txt]..."
 			if [ -f "${conf_directories[0]}/original/terminales.txt" ]
 			then
-				copy_from_to "../original/terminales.txt" "${conf_directories[3]}"
-				echo "Reparado ${conf_directories[3]}/terminales.txt"
+				copy_from_to "$original_dir/terminales.txt" "${conf_directories[3]}"
+				echo $(success_message "Reparado ${conf_directories[3]}/terminales.txt")
 				log_inf "Reparado ${conf_directories[3]}/terminales.txt"
 			else
-				echo "Fallo la reparacion de ${conf_directories[3]}/terminales.txt"
-				log_err "Fallo la reparacion de ${conf_directories[3]}/terminales.txt"
-				echo "No se pudo encontrar el archivo ${conf_directories[0]}/original/terminales.txt"
+				echo $(error_message "Fallo la reparación de ${conf_directories[3]}/terminales.txt")
+				log_err "Fallo la reparación de ${conf_directories[3]}/terminales.txt"
+				echo $(error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/terminales.txt")
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/terminales.txt"
-				echo "Para corregir el error se debe descargar el archivo faltante de github"
+				echo $(info_message "Para corregir el error se debe descargar el archivo faltante de github")
 				log_err "Para corregir el error se debe descargar el archivo faltante de github"
 				repaired=0
 			fi
@@ -470,20 +434,20 @@ function repair_news_input() {
 	if [ ! -d "${conf_directories[4]}" ]	
 	then
 		echo " "
-		echo "Reparando ${conf_directories[4]}..."
+		echo $(info_message "Reparando ${conf_directories[4]}...")
 		log_inf "Reparando ${conf_directories[4]}..."
 		make_directory "Directorio de novedades" "${conf_directories[4]}"
 		make_directory "Directorio de novedades aceptadas" "${news_input_ok_dir}"
-		echo "Reparado ${conf_directories[4]}"
+		echo $(success_message "Reparado ${conf_directories[4]}")
 		log_inf "Reparado ${conf_directories[4]}"
 	else
 		if [ ! -d "${news_input_ok_dir}" ]
 		then
 			echo " "
-			echo "Reparando ${news_input_ok_dir}..."
+			echo $(info_message "Reparando ${news_input_ok_dir}...")
 			log_inf "Reparando ${news_input_ok_dir}..."
 			make_directory "Directorio de novedades aceptadas" "${news_input_ok_dir}"
-			echo "Reparado ${news_input_ok_dir}"
+			echo $(success_message "Reparado ${news_input_ok_dir}")
 			log_inf "Reparado ${news_input_ok_dir}"
 		fi
 	fi
@@ -495,10 +459,10 @@ function repair_rejected() {
 	if [ ! -d "${conf_directories[5]}" ]	
 	then
 		echo " "
-		echo "Reparando ${conf_directories[5]}..."
+		echo $(info_message "Reparando ${conf_directories[5]}...")
 		log_inf "Reparando ${conf_directories[5]}..."
 		make_directory "Directorio de archivos rechazados" ${conf_directories[5]}
-		echo "Reparado ${conf_directories[5]}"
+		echo $(success_message "Reparado ${conf_directories[5]}")
 		log_inf "Reparado ${conf_directories[5]}"
 	fi
 	return 1
@@ -509,10 +473,10 @@ function repair_lots() {
 	if [ ! -d "${conf_directories[6]}" ]	
 	then
 		echo " "
-		echo "Reparando ${conf_directories[6]}..."
+		echo $(info_message "Reparando ${conf_directories[6]}...")
 		log_inf "Reparando ${conf_directories[6]}..."
 		make_directory "Directorio de lotes procesados" ${conf_directories[6]}
-		echo "Reparado ${conf_directories[6]}"
+		echo $(success_message "Reparado ${conf_directories[6]}")
 		log_inf "Reparado ${conf_directories[6]}"
 	fi
 	return 1
@@ -523,10 +487,10 @@ function repair_results() {
 	if [ ! -d "${conf_directories[7]}" ]	
 	then
 		echo " "
-		echo "Reparando ${conf_directories[7]}..."
+		echo $(info_message "Reparando ${conf_directories[7]}...")
 		log_inf "Reparando ${conf_directories[7]}..."
 		make_directory "Directorio de resultados" ${conf_directories[7]}
-		echo "Reparado ${conf_directories[7]}"
+		echo $(success_message "Reparado ${conf_directories[7]}")
 		log_inf "Reparado ${conf_directories[7]}"
 	fi
 	return 1	
@@ -548,28 +512,28 @@ function system_check() {
 
 # Repara el sistema dañado.
 function repair() {
-	echo "Sistema dañado, se procede a rutina de reparacion..."
-	log_inf "Sistema dañado, se procede a rutina de reparacion..."
-	confirm_operation "REPARACIÓN"
+	echo $(warning_message "Sistema dañado, se procede a rutina de reparación...")
+	log_inf "Sistema dañado, se procede a rutina de reparación..."
+	confirm_operation "REPARACION"
 	
 	if [ $? -eq 1 ]
 	then
 		system_check
 		if [ $? -eq 1 ]
 		then
-			echo "Estado de la reparacion:                     REPARADO"
-			log_inf "Estado de la reparacion:                     REPARADO"	
+			echo $(success_message "Estado de la reparación:                     $(display_ok "REPARADO")")
+			log_inf "Estado de la reparación:                     REPARADO"	
 			sed -i "/^REPARACION/d" "$conf_file_path"
 			echo "REPARACION-$(date '+%d/%m/%Y %H:%M:%S')-$(whoami)" >> "$conf_file_path"
 			log_inf "REPARACION $(date '+%d/%m/%Y %H:%M:%S') $(whoami)"
 		else
-			echo "Estado de la reparacion:                     FALLIDA"
-			log_inf "Estado de la reparacion:                     FALLIDA"	
+			echo $(error_message "Estado de la reparación:                     $(bold "FALLIDA")")
+			log_err "Estado de la reparación:                     FALLIDA"	
 		fi
 
 	else
-		echo "Estado de la reparacion:                     RECHAZADA"
-		log_inf "Estado de la reparacion:                     RECHAZADA"
+		echo $(error_message "Estado de la reparación:                     $(bold "RECHAZADA")")
+		log_err "Estado de la reparación:                     RECHAZADA"
 	fi
 }
 

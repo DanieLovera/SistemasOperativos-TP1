@@ -14,6 +14,11 @@ function real_path() {
 conf_file_path="$(real_path)/sotp1.conf"
 install_script_path="$(real_path)/sotp1.sh"
 
+# Puedo usar $DIRBIN porque sé que está incializado el ambiente
+stop_script_path="$DIRBIN/frenotp1.sh"
+start_script_path="$DIRBIN/arrancotp1.sh"
+EXECUTABLE="$DIRBIN/parser.sh" # Debería ser cuotatp
+
 # include conf_utils
 . "$(real_path)/conf_utils.sh"
 
@@ -101,28 +106,80 @@ function check_installation() {
 	return 0
 }
 
+# @return 0 si el proceso principal está seteado y está corriendo
+# 1 en caso contrario
+function check_if_program_running() {
+	if [[ -n $TP_PID && -e /proc/$TP_PID ]]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function show_stop_program_guide() {
+	if [ ! -f "$stop_script_path" ]
+	then
+		install_warning_message
+	else
+		echo -e $(info_message "Proceso ya corriendo (ppid: $(bold $TP_PID)). 
+		Para poder cortar esa ejecución ejecute $(bold "bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")")")
+		log_inf "Proceso ya corriendo (ppid: $TP_PID) para poder cortar esa ejecución ejecute"
+		log_inf "Para poder cortar esa ejecución ejecute bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")"
+	fi
+}
+
+function show_start_program_guide() {
+	if [ ! -f "$start_script_path" ]
+	then
+		install_warning_message
+	else
+		echo -e $(info_message "Ambiente ya configurado. 
+		Para poder cortar esa ejecución ejecute $(bold "bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")")")
+		log_inf "Ambiente ya configurado."
+		log_inf "Para poder cortar esa ejecución ejecute bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")"
+	fi
+}
+
+function run_tp_scripts() {
+	"$EXECUTABLE" &
+	TP_PID="$!"
+	export TP_PID
+}
+
 function run() {
+	check_if_program_running
+	if [ $? -eq 0 ]
+	then
+		show_stop_program_guide
+		return 0
+	fi
+
 	check_installation
 	if [ $? -eq 0 ]
 	then
-		# echo "${GRUPO}" # VACIO
 		check_env_configuration
 		if [ $? -ne 0 ]
 		then
 			set_environments_vars
+			if [ $? -eq 0 ]
+			then
+				echo $(success_message "Se inició el ambiente correctamente")
+				log_inf "Se inició el ambiente correctamente"
+			fi
+		else
+			show_start_program_guide
+			return 0
 		fi
-		if [ $? -eq 0 ]
-		then
-			echo $(success_message "Se inició el ambiente correctamente")
-			log_inf "Se inició el ambiente correctamente"
-		fi
-		# echo "${GRUPO}"
-		# bash test.sh # TODO: temporal?
+
+		# TODO: Falta invocar el proceso principal
+		run_tp_scripts
+
+
 	else
 		check_install_script
 	fi
 
-	# TODO: Falta invocar el proceso principal
 }
 
 run

@@ -29,15 +29,18 @@ function log_inf() {
 function log_war() {
 	echo "WAR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> ${path_to_log}
 }
+
 function log_err() {
     echo ${1}
 	echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${1}-$(whoami)" >> ${path_to_log}
 }
+
 function reject_field() {
     local rejected_transactions=${path_to_rechazos}/${comercio}/transacciones.rech
     echo "Se rechazo porque $1 desde el archivo $2 el registro: " >> ${rejected_transactions}
     echo "$3" >> ${rejected_transactions} 
 }
+
 function duplicate() {
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
@@ -50,6 +53,7 @@ function duplicate() {
         fi
 	done
 }
+
 function filter_lote() {
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
@@ -63,6 +67,7 @@ function filter_lote() {
         fi
 	done
 }
+
 function filter_empty() {
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
@@ -75,6 +80,7 @@ function filter_empty() {
         fi
 	done
 }
+
 function move_to_ok() {
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
@@ -83,10 +89,12 @@ function move_to_ok() {
         echo ${line}
 	done
 }
+
 function filter_files() {
     ls ${path_to_entry} -I 'ok' | filter_lote | duplicate | filter_empty
     # falta chequear que sea de texto 
 }
+
 function process_files() {
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
@@ -94,6 +102,7 @@ function process_files() {
 
 	done
 }
+
 function process_file() {
     read -r file_name
     # echo ${line} | filter_bad_file
@@ -101,6 +110,7 @@ function process_file() {
     mkdir -p ${path_to_rechazos}/${comercio}
     grep "^" ${path_to_entry}/${file_name} | process_registers
 }
+
 function log_missing_registers() {
     msg="En el archivo ${file_name} faltan los registros "
     while [ ${idx} -lt ${index} ]
@@ -110,6 +120,7 @@ function log_missing_registers() {
     done
     echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${msg}-$(whoami)" >> ${path_to_log}
 }
+
 function process_registers() {
     idx=1
     idx=$((10#${idx}))
@@ -181,6 +192,7 @@ function process_registers() {
         idx=$((${idx}+1))
     done
 }
+
 function reg_salida_caso2() {
     cuotas_encontradas=$(grep " ," ${path_to_financiacion} | cut -d "," -f3 | grep "${cuotas_aux}")
     if [ "${cuotas_encontradas}" == "${cuotas_aux}" ] ; then
@@ -230,6 +242,7 @@ function cargar_cuotas_interes() {
         cuota_actual=$((${cuota_actual}+1))
     done
 }
+
 function reg_salida_caso3() {
     cuota_actual=1
     monto_por_cuota=$((${monto_total}/${cuotas}))
@@ -242,6 +255,7 @@ function reg_salida_caso3() {
         cuota_actual=$((${cuota_actual}+1))
     done
 }
+
 function sumar_mes() {
     local mes=$((10#$(echo ${fecha_compra} | cut -c 5-6 )))
     local dia=$(echo ${fecha_compra} | cut -c 7-8)
@@ -254,6 +268,7 @@ function sumar_mes() {
     fi
     fecha_cuota="${anio}0${mes}${dia}"
 }
+
 function filter_bad_file() {
     read file_name
     var=$(grep -c "^[^0-9]\{4\}" ${path_to_entry}/${file_name}) 
