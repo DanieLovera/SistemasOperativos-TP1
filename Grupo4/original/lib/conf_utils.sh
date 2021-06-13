@@ -136,15 +136,32 @@ function check_system() {
 	are_distinct_directories
 	local distinct_directories=$?
 
-	if [[ $could_load_conf -eq 1 || \
-		  $missing_directory_status -eq 1 || \
-		  $missing_file_status -eq 1 || \
-		  $distinct_directories -eq 1 ]]
+	if [ $could_load_conf -eq 1 ] 
 	then
+		echo $(error_message "No se pudo cargar el archivo de configuración")
+		log_err "No se pudo cargar el archivo de configuración"
 		return 1
-	else
-        return 0
 	fi
+
+	if [ $missing_directory_status -eq 1 ] 
+	then
+		echo $(error_message "Algún directorio no existe")
+		log_err "Algún directorio no existe"
+		return 1
+	fi
+	if [ $missing_file_status -eq 1 ] 
+	then
+		echo $(error_message "Algún archivo no existe")
+		log_err "Algún archivo no existe"
+		return 1
+	fi
+	if [ $distinct_directories -eq 1 ] 
+	then
+		echo $(error_message "No se permiten directorios repetidos")
+		log_err "No se permiten directorios repetidos"
+		return 1
+	fi
+	return 0
 }
 
 # Da permisos de lectura a los archivos del sistema
