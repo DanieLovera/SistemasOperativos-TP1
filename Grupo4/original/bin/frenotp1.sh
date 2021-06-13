@@ -16,7 +16,7 @@ lib_dir="$GRUPO/original/lib"
 
 
 function run() {
-    check_if_program_running
+    check_if_program_is_running
 	if [ $? -ne 0 ]
 	then
 		echo $(info_message "El sistema ya está detenido.")

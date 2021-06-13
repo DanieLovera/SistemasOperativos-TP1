@@ -11,6 +11,8 @@ EXECUTABLE="$DIRBIN/cuotatp.sh"
 # include log
 . "$lib_dir/log.sh" "$1"
 
+# include pprint
+. "$lib_dir/pprint.sh"
 
 function show_stop_program_guide() {
 	if [ ! -f "$stop_script_path" ]
@@ -46,7 +48,7 @@ function get_current_pid() {
 }
 # @return 0 si el proceso principal está seteado y está corriendo
 # 1 en caso contrario
-function check_if_program_running() {
+function check_if_program_is_running() {
 	if [[ -f "$temp_pid_locator_path" && \
           -e /proc/$(get_current_pid) ]]
 	then

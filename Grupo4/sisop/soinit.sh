@@ -22,24 +22,6 @@ install_script_path="$conf_dir/sotp1.sh"
 . "$lib_dir/conf_utils.sh"
 
 
-
-# @return 0 en caso de que el entorno coincida con la configuración del
-# archivo de configuración, 1 en caso contrario.
-function check_env_configuration() {
-	if [[ "$GRUPO" = "${conf_directories[0]}" && \
-		  "$DIRCONF" = "${conf_directories[1]}" && \
-		  "$DIRBIN" = "${conf_directories[2]}" && \
-		  "$DIRMAE" = "${conf_directories[3]}" && \
-		  "$DIRENT" = "${conf_directories[4]}" && \
-		  "$DIRRECH" = "${conf_directories[5]}" && \
-		  "$DIRPROC" = "${conf_directories[6]}" && \
-		  "$DIRSAL" = "${conf_directories[7]}" ]]
-	then
-		return 0
-	fi
-	return 1
-}
-
 function set_environments_vars() {
 	GRUPO="${conf_directories[0]}"
 	DIRCONF="${conf_directories[1]}"

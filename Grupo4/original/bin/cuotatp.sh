@@ -257,7 +257,8 @@ function sumar_mes() {
 # log_inf "voy por el ciclo ${cycle}"
 # cycle=$((${cycle}+1))
 # log_inf "voy por el ciclo ${cycle}"
+echo "" # Para evitar que quede sobre la misma línea de comando
 
-echo "$info_message El sistema está arrancando"
+info_message "El sistema está arrancando"
 filter_files 
 process_files

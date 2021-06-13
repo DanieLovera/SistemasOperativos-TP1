@@ -12,7 +12,7 @@ lib_dir="$GRUPO/original/lib"
 
 
 function run() {
-    check_if_program_running
+    check_if_program_is_running
 	if [ $? -eq 0 ]
 	then
 		show_stop_program_guide
