@@ -19,26 +19,34 @@ path_to_financiacion="/home/fede/Documentos/sisop/sistemas_operativos_tp1/Grupo4
 # path_to_sal="/home/manulon/Escritorio/TP1-SISOP/Grupo4/SALIDATP"
 # path_to_terminales="/home/manulon/Escritorio/TP1-SISOP/Grupo4/master/terminales.txt"
 
+path_to_log="$DIRCONF/tpcuotas.log" # TODO: está bien el directorio?
+path_to_entry="$DIRENT"
+path_to_lote="$DIRPROC"
+path_to_rechazos="$DIRRECH"
+path_to_ok="$DIRENT/ok"
+path_to_sal="$DIRSAL"
+path_to_terminales="$DIRMAE/terminales.txt"
+path_to_financiacion="$DIRMAE/financiacion.txt"
+
+
+lib_dir="$GRUPO/original/lib"
+
+# include log
+. "$lib_dir/log.sh" "$path_to_log"
+
+# include pprint
+. "$lib_dir/pprint.sh"
+
 cycle=1
 
-
-function log_inf() {
-    echo "INF-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> ${path_to_log}
-}
-
-function log_war() {
-	echo "WAR-$(date "+%d/%m/%Y %H:%M:%S")-$1-$(whoami)" >> ${path_to_log}
-}
-
-function log_err() {
-    echo ${1}
-	echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${1}-$(whoami)" >> ${path_to_log}
-}
 
 function reject_field() {
     local rejected_transactions=${path_to_rechazos}/${comercio}/transacciones.rech
     echo "Se rechazo porque $1 desde el archivo $2 el registro: " >> ${rejected_transactions}
-    echo "$3" >> ${rejected_transactions} 
+    echo "$3" >> ${rejected_transactions}
+
+    echo -e $(error_message "Se rechazo porque $1 desde el archivo $2 el registro: \n\t$3")
+    log_err "Se rechazo porque $1 desde el archivo $2 el registro: $3"
 }
 
 function duplicate() {
@@ -49,7 +57,8 @@ function duplicate() {
             echo ${line}
         else
             mv "${path_to_entry}/${line}" "${path_to_rechazos}"
-            log_inf "${line} se rechazo por estar vacio"
+            echo $(error_message "$line se rechazó por estar vacio")
+            log_err "${line} se rechazo por estar vacio"
         fi
 	done
 }
@@ -61,7 +70,8 @@ function filter_lote() {
 		if [ -z ${var} ]
         then
             mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            log_inf "${line} se rechazo por nombre no valido"
+            echo $(error_message "$line se rechazó por nombre no válido")
+            log_err "${line} se rechazo por nombre no valido"
         else
             echo ${line}
         fi
@@ -76,7 +86,8 @@ function filter_empty() {
             echo ${line}
         else 
             mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            log_inf "${line} se rechazo por estar vacio"
+            echo $(error_message "$line se rechazó por estar vacio")
+            log_err "${line} se rechazo por estar vacio"
         fi
 	done
 }
@@ -118,7 +129,7 @@ function log_missing_registers() {
         msg="${msg}${idx} "
         idx=$((${idx}+1))
     done
-    echo "ERR-$(date "+%d/%m/%Y %H:%M:%S")-${msg}-$(whoami)" >> ${path_to_log}
+    log_err "$msg"
 }
 
 function process_registers() {
@@ -184,7 +195,7 @@ function process_registers() {
                     reg_salida_caso2
                 fi
             else  
-                echo "cuotas con interes"
+                echo $(info_message "Cuotas con interes")
             fi
             
         fi
@@ -201,7 +212,7 @@ function reg_salida_caso2() {
         if [ ${monto_total} -le ${tope} ] ; then
             coef_financiacion=$(grep " ," ${path_to_financiacion} | grep ",${cuotas_aux}," | cut -d "," -f4)
             plan="Entidad"
-            echo "estoy en caso2 y el coef es ${coef_financiacion} y las cuotas ${cuotas_aux}"
+            echo $(info_message "estoy en caso2 y el coef es ${coef_financiacion} y las cuotas ${cuotas_aux}")
             cargar_cuotas_interes
         else
             reg_salida_caso3
@@ -214,22 +225,22 @@ function reg_salida_caso2() {
 function reg_salida_caso1() {
     coef_financiacion=$(echo ${rubro_aux} | grep ${cuotas_aux} | cut -d "," -f4)
     plan=$(grep ${rubro} ${path_to_financiacion} | grep ${cuotas_aux} | cut -d "," -f2)
-    echo "estoy en caso1"
+    echo $(info_message "estoy en caso1")
     cargar_cuotas_interes    
 }
 
 function cargar_cuotas_interes() {
     coef_financiacion=$(bc -l <<< "${coef_financiacion}/10000")
     coef_financiacion=$(echo ${coef_financiacion} | grep -o '^[0-9].[0-9]\{4\}')
-    echo "el coef vale ${coef_financiacion}"
+    echo $(info_message "el coef vale ${coef_financiacion}")
     monto_original=${monto_total}
-    echo "el monto original vale ${monto_original}"
+    echo $(info_message "el monto original vale ${monto_original}")
     monto_total=$( bc -l <<< ${monto_original}*${coef_financiacion})
     monto_total=$(echo ${monto_total} | grep -o '^[0-9]*')
-    echo "el monto total vale ${monto_total}"
+    echo $(info_message"el monto total vale ${monto_total}")
     costo_financiacion=$(bc -l <<< ${monto_total}-${monto_original})
     costo_financiacion=$(echo ${costo_financiacion} | grep -o '^[0-9]*' )
-    echo "el costo de financiacion vale ${costo_financiacion}"
+    echo $(info_message"el costo de financiacion vale ${costo_financiacion}")
     cuota_actual=1
     monto_por_cuota=$(bc -l <<< "${monto_total}/${cuotas}")
     monto_por_cuota=$(echo ${monto_por_cuota} | grep -o '^[0-9]*')
@@ -290,7 +301,8 @@ function check_increment() {
         var=$((10#${var})) # casteo a base 10
         if [ ${var} -lt ${idx} ] ;then
             mv "${path_to_entry}/${file_name}" "${path_to_rechazos}" 
-            log_inf "${file_name} se rechazo por tener indice mal ordenado o faltante"
+            echo $(error_message "$file_name se rechazó por tener índice mal ordenado o faltante")
+            log_err "${file_name} se rechazo por tener indice mal ordenado o faltante"
             return
         fi
         idx=$((${idx}+1))
@@ -309,4 +321,6 @@ function check_increment() {
 # log_inf "voy por el ciclo ${cycle}"
 # cycle=$((${cycle}+1))
 # log_inf "voy por el ciclo ${cycle}"
+
+echo $(info_message "El sistema está arrancando")
 filter_files | process_files

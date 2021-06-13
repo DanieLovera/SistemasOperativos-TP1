@@ -1,3 +1,4 @@
+#!/bin/bash
 LOG_FILE=$1 # TODO: Ver si sigue guncionando con varios includes
 
 function log() {

@@ -1,26 +1,27 @@
 #!/bin/bash
-# Como este scrip se tiene que ejecutar con `source` o con `. <script>`
+# Como este script se tiene que ejecutar con `source` o con `. <script>`
 # no se puede usar $0.
 function real_path() {
 	echo $(dirname $(realpath ${BASH_SOURCE[0]}))
 }
 
+conf_dir="$(real_path)"
+group_dir="$(dirname $conf_dir)"
+lib_dir="$group_dir/original/lib"
+
 # include pprint
-. "$(real_path)/pprint.sh"
+. "$lib_dir/pprint.sh"
 
 # include log
-. "$(real_path)/log.sh" "$(real_path)/soinit.log"
+. "$lib_dir/log.sh" "$conf_dir/soinit.log"
 
-conf_file_path="$(real_path)/sotp1.conf"
-install_script_path="$(real_path)/sotp1.sh"
-
-# Puedo usar $DIRBIN porque sé que está incializado el ambiente
-stop_script_path="$DIRBIN/frenotp1.sh"
-start_script_path="$DIRBIN/arrancotp1.sh"
-EXECUTABLE="$DIRBIN/parser.sh" # Debería ser cuotatp
+conf_file_path="$conf_dir/sotp1.conf"
+install_script_path="$conf_dir/sotp1.sh"
 
 # include conf_utils
-. "$(real_path)/conf_utils.sh"
+. "$lib_dir/conf_utils.sh"
+
+
 
 # @return 0 en caso de que el entorno coincida con la configuración del
 # archivo de configuración, 1 en caso contrario.
@@ -52,6 +53,7 @@ function set_environments_vars() {
 	export DIRCONF
 	export DIRBIN
 	export DIRNAME
+	export DIRMAE
 	export DIRENT
 	export DIRRECH
 	export DIRPROC
@@ -61,6 +63,8 @@ function set_environments_vars() {
 	then
 		echo $(info_message "Variables de ambiente configuradas")
 		log_inf "Variables de ambiente configuradas"
+		# include run_utils
+		. "$lib_dir/run_utils.sh" "$conf_dir/soinit.log"
 		return 0
 	else
 		echo $(error_message "No se pudo configurar el ambiente")
@@ -106,55 +110,7 @@ function check_installation() {
 	return 0
 }
 
-# @return 0 si el proceso principal está seteado y está corriendo
-# 1 en caso contrario
-function check_if_program_running() {
-	if [[ -n $TP_PID && -e /proc/$TP_PID ]]
-	then
-		return 0
-	else
-		return 1
-	fi
-}
-
-function show_stop_program_guide() {
-	if [ ! -f "$stop_script_path" ]
-	then
-		install_warning_message
-	else
-		echo -e $(info_message "Proceso ya corriendo (ppid: $(bold $TP_PID)). 
-		Para poder cortar esa ejecución ejecute $(bold "bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")")")
-		log_inf "Proceso ya corriendo (ppid: $TP_PID) para poder cortar esa ejecución ejecute"
-		log_inf "Para poder cortar esa ejecución ejecute bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")"
-	fi
-}
-
-function show_start_program_guide() {
-	if [ ! -f "$start_script_path" ]
-	then
-		install_warning_message
-	else
-		echo -e $(info_message "Ambiente ya configurado. 
-		Para poder cortar esa ejecución ejecute $(bold "bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")")")
-		log_inf "Ambiente ya configurado."
-		log_inf "Para poder cortar esa ejecución ejecute bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")"
-	fi
-}
-
-function run_tp_scripts() {
-	"$EXECUTABLE" &
-	TP_PID="$!"
-	export TP_PID
-}
-
 function run() {
-	check_if_program_running
-	if [ $? -eq 0 ]
-	then
-		show_stop_program_guide
-		return 0
-	fi
-
 	check_installation
 	if [ $? -eq 0 ]
 	then
@@ -168,13 +124,17 @@ function run() {
 				log_inf "Se inició el ambiente correctamente"
 			fi
 		else
+			check_if_program_is_running
+			if [ $? -eq 0 ]
+			then
+				show_stop_program_guide
+				return 0
+			fi
 			show_start_program_guide
 			return 0
 		fi
 
-		# TODO: Falta invocar el proceso principal
-		run_tp_scripts
-
+		run_main_process
 
 	else
 		check_install_script

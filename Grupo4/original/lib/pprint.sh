@@ -1,4 +1,4 @@
-
+#!/bin/bash
 RESET="\e[0m"
 BOLD="\e[1m"
 ITALIC="\e[3m"

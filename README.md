@@ -7,6 +7,24 @@
 - **Agustín More - 102914**  
 - **Daniel Alejandro Lovera López - 103442**
 
+## Guía de ejecución rápida
+
+Guía para el desarrollo (no necesariamente va a quedar en el informe final)
+
+```sh
+# Desde .../Grupo4 como referencia, no debería importar
+# desde dónde se ejecuta
+bash sisop/sotp1.sh
+source sisop/soinit.sh
+# Acá debería estar corriendo el sistema
+# Para detenerlo
+source bin/frenotp1.sh
+# Para volver a arrancarlo
+source bin/arrancotp1.sh
+# bin o la carpeta que se haya elegido en la instalación
+# más genérico $DIRBIN
+```
+
 ## Acceso ##
 1. Haga click en **[acceso](https://github.com/DanieLovera/sistemas_operativos_tp1)** para dirigirse al repositorio digital de github que contiene los archivos de descarga.  
 

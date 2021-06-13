@@ -19,15 +19,15 @@ news_input_ok_dir="$group_dir/ENTRADATP/ok"
 rejected_files_dir="$group_dir/rechazos"
 lots_dir="$group_dir/lotes"
 results_dir="$group_dir/SALIDATP"
-
+lib_dir="$group_dir/original/lib"
 # include conf_utils
-. "$conf_dir/conf_utils.sh"
+. "$lib_dir/conf_utils.sh"
 
 # include log
-. "$conf_dir/log.sh" "$conf_dir/sotp1.log"
+. "$lib_dir/log.sh" "$conf_dir/sotp1.log"
 
 # include pprint
-. "$conf_dir/pprint.sh"
+. "$lib_dir/pprint.sh"
 
 
 # Agrega los nombres de directorios principales a un archivo

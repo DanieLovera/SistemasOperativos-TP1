@@ -1,3 +1,4 @@
+#!/bin/bash
 # Lista con los datos del archivo de configuracion final.
 conf_directories=("$group_dir" "$conf_file_path" "$exe_dir" "$sys_tables_dir" 
 				  "$news_input_dir" "$rejected_files_dir" "$lots_dir" 
