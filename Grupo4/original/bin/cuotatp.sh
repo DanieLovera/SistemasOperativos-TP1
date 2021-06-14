@@ -8,7 +8,7 @@ path_to_ok="$DIRENT/ok"
 path_to_sal="$DIRSAL"
 path_to_terminales="$DIRMAE/terminales.txt"
 path_to_financiacion="$DIRMAE/financiacion.txt"
-
+ 
 
 lib_dir="$GRUPO/original/lib"
 
