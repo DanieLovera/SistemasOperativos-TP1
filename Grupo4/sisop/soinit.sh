@@ -99,20 +99,20 @@ function run() {
 	if [ $? -ne 0 ]
 	then
 		check_install_script
-		exit 22
+		return 1
 	fi
 
 	check_env_configuration
 	if [ $? -eq 0 ]
 	then		
 		show_start_program_guide
-		exit 0
+		return 0
 	fi
 
 	set_environments_vars
 	if [ $? -ne 0 ]
 	then
-		exit 22
+		return 1
 	fi
 
 	success_message "Se inició el ambiente correctamente"
@@ -122,7 +122,7 @@ function run() {
 	if [ $? -eq 0 ]
 	then
 		show_stop_program_guide
-		exit 0
+		return 0
 	fi
 	run_main_process
 
