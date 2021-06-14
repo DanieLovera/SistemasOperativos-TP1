@@ -106,8 +106,7 @@ function read_directory() {
 # @param $1: mensaje del directorio creado.
 # @param $2: ruta de directorio que se va a crear.
 function make_directory() {
-	# TODO: en caso de que exista borrarla?
-	# rm -r "$2"
+	rm -rf "$2"
 
 	mkdir -p "$2"
 	echo -e $(info_message "$(bold "$1") creado en: $(underline "$2")")
@@ -362,8 +361,8 @@ function repair_exe() {
 				log_err "Fallo la reparación de ${conf_directories[2]}/cuotatp.sh"
 				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/cuotatp.sh"
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/cuotatp.sh"
-				info_message "Para corregir el error se debe descargar el archivo faltante de github"
-				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 				repaired=0
 			fi
 		fi
@@ -383,8 +382,8 @@ function repair_exe() {
 				log_err "Fallo la reparación de ${conf_directories[2]}/arrancotp1.sh"
 				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/arrancotp1.sh"
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/arrancotp1.sh"
-				info_message "Para corregir el error se debe descargar el archivo faltante de github"
-				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 				repaired=0
 			fi
 		fi
@@ -404,8 +403,8 @@ function repair_exe() {
 				log_err "Fallo la reparación de ${conf_directories[2]}/frenotp1.sh"
 				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/frenotp1.sh"
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/frenotp1.sh"
-				info_message "Para corregir el error se debe descargar el archivo faltante de github"
-				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 				repaired=0
 			fi
 		fi
@@ -439,8 +438,8 @@ function repair_sys_table() {
 			log_err "-${conf_directories[0]}/original/financiacion.txt"
 			echo -e "\t-${conf_directories[0]}/original/terminales.txt"
 			log_err "-${conf_directories[0]}/original/terminales.txt"
-			echo "Para corregir el error se deben descargar los archivos faltantes de github"
-			log_err "Para corregir el error se deben descargar los archivos faltantes de github"
+			info_message "Para corregir el error se deben descargar los archivos faltantes de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+			log_err "Para corregir el error se deben descargar los archivos faltantes de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 			repaired=0
 		fi
 	else
@@ -459,8 +458,8 @@ function repair_sys_table() {
 				log_err "Fallo la reparación de ${conf_directories[3]}/financiacion.txt"
 				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/financiacion.txt"
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/financiacion.txt"
-				info_message "Para corregir el error se debe descargar el archivo faltante de github"
-				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 				repaired=0
 			fi
 		fi
@@ -480,8 +479,8 @@ function repair_sys_table() {
 				log_err "Fallo la reparación de ${conf_directories[3]}/terminales.txt"
 				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/terminales.txt"
 				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/terminales.txt"
-				info_message "Para corregir el error se debe descargar el archivo faltante de github"
-				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github $(bold "git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git")"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github (git clone https://github.com/DanieLovera/sistemas_operativos_tp1.git)"
 				repaired=0
 			fi
 		fi
@@ -546,7 +545,7 @@ function repair_lots() {
 function repair_results() {
 	if [ ! -d "${conf_directories[7]}" ]	
 	then
-		echo " "
+		echo ""
 		info_message "Reparando ${conf_directories[7]}..."
 		log_inf "Reparando ${conf_directories[7]}..."
 		make_directory "Directorio de resultados" "${conf_directories[7]}"
@@ -607,8 +606,7 @@ function run() {
 		install
 		remove_confirmed_directories_names
 
-		echo ""
-		echo "$(success_message "Estado de la instalación:                     $(display_ok "COMPLETADA")")"
+		success_message "Estado de la instalación:                     $(display_ok "COMPLETADA")"
 		log_inf "Estado de la instalación:                     COMPLETADA"
 	else
 		check_system

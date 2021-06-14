@@ -45,13 +45,13 @@ function set_environments_vars() {
 	check_env_configuration
 	if [ $? -eq 0 ]
 	then
-		echo $(info_message "Variables de ambiente configuradas")
+		info_message "Variables de ambiente configuradas"
 		log_inf "Variables de ambiente configuradas"
 		# include run_utils
 		. "$lib_dir/run_utils.sh" "$conf_dir/soinit.log"
 		return 0
 	else
-		echo $(error_message "No se pudo configurar el ambiente")
+		error_message "No se pudo configurar el ambiente"
 		log_err "No se pudo configurar el ambiente"
 		return 1
 	fi
@@ -69,13 +69,13 @@ function check_installation() {
 	check_system
 	if [ $? -ne 0 ]
 	then
-		echo $(error_message "Sistema dañado")
+		error_message "Sistema dañado"
 		log_err "Sistema dañado"
 		return 1
 	else
-		echo $(info_message "Directorios del sistema... $(display_ok)")
+		info_message "Directorios del sistema... $(display_ok)"
 		log_inf "Directorios del sistema ok"
-		echo $(info_message "Archivos del sistema... $(display_ok)")
+		info_message "Archivos del sistema... $(display_ok)"
 		log_inf "Archivos del sistema ok"
 	fi
 
@@ -86,7 +86,7 @@ function check_installation() {
 		check_permissions
 		if [ $? -ne 0 ]
 		then
-			echo $(error_message "No se tienen permisos en los archivos")
+			error_message "No se tienen permisos en los archivos"
 			log_err "No se tienen permisos de lectura en los archivos"
 			return 1
 		fi
@@ -96,34 +96,35 @@ function check_installation() {
 
 function run() {
 	check_installation
+	if [ $? -ne 0 ]
+	then
+		check_install_script
+		exit 22
+	fi
+
+	check_env_configuration
+	if [ $? -eq 0 ]
+	then		
+		show_start_program_guide
+		exit 0
+	fi
+
+	set_environments_vars
+	if [ $? -ne 0 ]
+	then
+		exit 22
+	fi
+
+	success_message "Se inició el ambiente correctamente"
+	log_inf "Se inició el ambiente correctamente"
+	
+	check_if_program_is_running
 	if [ $? -eq 0 ]
 	then
-		check_env_configuration
-		if [ $? -ne 0 ]
-		then
-			set_environments_vars
-			if [ $? -eq 0 ]
-			then
-				echo $(success_message "Se inició el ambiente correctamente")
-				log_inf "Se inició el ambiente correctamente"
-			fi
-		else
-			#if [  ]
-			check_if_program_is_running
-			if [ $? -eq 0 ]
-			then
-				show_stop_program_guide
-				return 0
-			fi
-			show_start_program_guide
-			return 0
-		fi
-
-		run_main_process
-
-	else
-		check_install_script
+		show_stop_program_guide
+		exit 0
 	fi
+	run_main_process
 
 }
 

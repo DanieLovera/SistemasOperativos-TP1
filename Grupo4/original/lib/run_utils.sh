@@ -17,14 +17,14 @@ EXECUTABLE="$DIRBIN/cuotatp.sh"
 function show_stop_program_guide() {
 	if [ ! -f "$stop_script_path" ]
 	then
-		echo $(error_message "No se encontró el script para parar el sistema $(bold "frenotp1.sh")")
+		error_message "No se encontró el script para parar el sistema $(bold "frenotp1.sh")"
 		log_err "No se encontró el script para parar el sistema frenotp1.sh"
 		install_warning_message
 	else
 		echo -e $(info_message "Proceso ya corriendo (ppid: $(bold $(get_current_pid))). 
-		Para poder cortar esa ejecución ejecute $(bold "source $(echo "$stop_script_path" | sed "s-^$(pwd)/--")")")
+		Para poder cortar esa ejecución ejecute $(bold "bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")")")
 		log_inf "Proceso ya corriendo (ppid: $(get_current_pid)) para poder cortar esa ejecución ejecute"
-		log_inf "Para poder cortar esa ejecución ejecute source $(echo "$stop_script_path" | sed "s-^$(pwd)/--")"
+		log_inf "Para poder cortar esa ejecución ejecute bash $(echo "$stop_script_path" | sed "s-^$(pwd)/--")"
 	fi
 }
 
@@ -32,20 +32,19 @@ function show_start_program_guide() {
 	if [ ! -f "$start_script_path" ]
 	then
 		echo "$start_script_path"
-		echo $(error_message "No se encontró el script para arrancar el sistema $(bold "arrancotp1.sh")")
+		error_message "No se encontró el script para arrancar el sistema $(bold "arrancotp1.sh")"
 		log_err "No se encontró el script para arrancar el sistema frenotp1.sh"
 		install_warning_message
 	else
-		echo -e $(info_message "Ambiente ya configurado. 
-		Para poder arrancar el sistema, ejecute $(bold "source $(echo "$start_script_path" | sed "s-^$(pwd)/--")")")
-		log_inf "Ambiente ya configurado."
-		log_inf "Para poder arrancar el sistema, ejecute source $(echo "$start_script_path" | sed "s-^$(pwd)/--")"
+		echo -e $(info_message "Para poder arrancar el sistema, ejecute $(bold "bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")")")
+		log_inf "Para poder arrancar el sistema, ejecute bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")"
 	fi
 }
 
 function get_current_pid() {
     head -1 "$temp_pid_locator_path"
 }
+
 # @return 0 si el proceso principal está seteado y está corriendo
 # 1 en caso contrario
 function check_if_program_is_running() {
@@ -58,14 +57,35 @@ function check_if_program_is_running() {
 	fi
 }
 
+function is_env_init() {
+	if [ -z "$GRUPO" -o \
+		 -z "$DIRCONF" -o \
+	     -z "$DIRBIN" -o \
+	     -z "$DIRMAE" -o \
+	     -z "$DIRENT" -o \
+	     -z "$DIRRECH" -o \
+	     -z "$DIRPROC" -o \
+	     -z "$DIRSAL" ]
+	then
+		error_message "El ambiento no está correctamente inicializado inicializado"
+		info_message "Ejecute \"$(bold "$(echo "source $1/sisop/soinit.sh" | sed "s-^$(pwd)/--")")\" para inicializarlo"
+		log_err "El ambiento no está correctamente inicializado inicializado"
+		log_inf "Ejecute \"$(echo "source $1/sisop/soinit.sh" | sed "s-^$(pwd)/--")\" para inicializarlo"
+		return 1
+	fi
+	return 0
+}
+
 function run_main_process() {
 	"$EXECUTABLE" &
 	TP_PID="$!"
-	echo $(info_message "El sistema arrancó con pid: $(bold "$TP_PID")")
+	info_message "El sistema arrancó con pid: $(bold "$TP_PID")"
+	log_inf "El sistema arrancó con pid: $TP_PID"
 	echo $TP_PID > $temp_pid_locator_path
 }
 
 function stop_main_process() {
-    kill $(get_current_pid)
+	log_inf "Se detiene el proceso principal con pid: $(get_current_pid)"
+    kill $(get_current_pid) > /dev/null 2>&1
     rm "$temp_pid_locator_path"
 }

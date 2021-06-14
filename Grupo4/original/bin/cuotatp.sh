@@ -15,16 +15,12 @@ lib_dir="$GRUPO/original/lib"
 # include log
 . "$lib_dir/log.sh" "$path_to_log"
 
-# include pprint
-. "$lib_dir/pprint.sh"
-
 cycle=1
 
 
 function reject_field() {
     local rejected_transactions=${path_to_rechazos}/${comercio}/transacciones.rech
     echo "$2,$1,$3" >> ${rejected_transactions}
-    echo -e $(error_message "Se rechazo porque $1 desde el archivo $2 el registro: \n\t$3")
     log_err "Se rechazo porque $1 desde el archivo $2 el registro: $3"
 }
 
@@ -48,7 +44,6 @@ function filter_lote() {
 		if [ -z ${var} ]
         then
             mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            echo $(error_message "$line se rechazó por nombre no válido")
             log_err "${line} se rechazo por nombre no valido"
         else
             echo ${line}
@@ -64,7 +59,6 @@ function filter_empty() {
             echo ${line}
         else 
             mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            echo $(error_message "$line se rechazó por estar vacio")
             log_err "${line} se rechazo por estar vacio"
         fi
 	done
@@ -75,7 +69,6 @@ function move_to_ok() {
 	do
 		mv ${path_to_entry}/${line} ${path_to_entry}/ok
         log_inf "${line} guardado en ok"
-        echo $(info_message "${line} guardado en ok")
 	done
 }
 
@@ -97,7 +90,7 @@ function process_file() {
     local comercio=$(echo ${file_name} | cut -c 5-9) #substring
     mkdir -p ${path_to_rechazos}/${comercio}
     grep "^" ${path_to_ok}/${file_name} | process_registers
-    echo "${info_message} se termino de procesar ${file_name}"
+    log_inf "Se termino de procesar ${file_name}"
     mv "${path_to_ok}/${file_name}" "${path_to_lote}"
 }
 
@@ -252,13 +245,6 @@ function sumar_mes() {
     fecha_cuota="${anio}0${mes}${dia}"
 }
 
-
-
-
-# log_inf "voy por el ciclo ${cycle}"
-echo "" # Para evitar que quede sobre la misma línea de comando
-
-info_message "El sistema está arrancando"
 while [ true ]; do
     log_inf "voy por el ciclo ${cycle}"
     cycle=$((${cycle}+1))
