@@ -1,0 +1,88 @@
+INF-13/06/2021 22:12:23-Iniciando sistema...-daniel
+INF-13/06/2021 22:12:23-Creando archivo /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/.confirmed_directories-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio Grupo4-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio sisop-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio original-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio tp1datos-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio misdatos-daniel
+INF-13/06/2021 22:12:23-Prohibiendo nombre de directorio mispruebas-daniel
+INF-13/06/2021 22:12:23-Comenzando instalacion del sistema...-daniel
+INF-13/06/2021 22:12:23-Defina el nombre del directorio de ejecutables o enter para continuar-daniel
+INF-13/06/2021 22:12:23-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:27-... -daniel
+INF-13/06/2021 22:12:27-Prohibiendo nombre de directorio bin-daniel
+INF-13/06/2021 22:12:27-Quedó configurado el directorio de ejecutables en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:27-directorio de ejecutables /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:27-Defina el nombre del directorio de tablas del sistema o enter para continuar-daniel
+INF-13/06/2021 22:12:27-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:28-... -daniel
+INF-13/06/2021 22:12:28-Prohibiendo nombre de directorio master-daniel
+INF-13/06/2021 22:12:28-Quedó configurado el directorio de tablas del sistema en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:28-directorio de tablas del sistema /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:28-Defina el nombre del directorio de novedades o enter para continuar-daniel
+INF-13/06/2021 22:12:28-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:29-... -daniel
+INF-13/06/2021 22:12:29-Prohibiendo nombre de directorio ENTRADATP-daniel
+INF-13/06/2021 22:12:29-Quedó configurado el directorio de novedades en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:29-directorio de novedades /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:29-directorio de novedades/ok /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP/ok-daniel
+INF-13/06/2021 22:12:29-Defina el nombre del directorio de archivos rechazados o enter para continuar-daniel
+INF-13/06/2021 22:12:29-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:30-... -daniel
+INF-13/06/2021 22:12:30-Prohibiendo nombre de directorio rechazos-daniel
+INF-13/06/2021 22:12:30-Quedó configurado el directorio de archivos rechazados en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:30-directorio de archivos rechazados /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:30-Defina el nombre del directorio de lotes procesados o enter para continuar-daniel
+INF-13/06/2021 22:12:30-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:31-... -daniel
+INF-13/06/2021 22:12:31-Prohibiendo nombre de directorio lotes-daniel
+INF-13/06/2021 22:12:31-Quedó configurado el directorio de lotes procesados en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:31-directorio de lotes procesados /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:31-Defina el nombre del directorio de resultados o enter para continuar-daniel
+INF-13/06/2021 22:12:31-... Directorio por defecto: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:33-... -daniel
+INF-13/06/2021 22:12:33-Prohibiendo nombre de directorio SALIDATP-daniel
+INF-13/06/2021 22:12:33-Quedó configurado el directorio de resultados en /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:33-directorio de resultados /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:33-TP1 SO7508 Cuatrimestre I 2021 Curso Martes Grupo4-daniel
+INF-13/06/2021 22:12:33-Tipo de proceso:                          INSTALACION-daniel
+INF-13/06/2021 22:12:33-Directorio padre:                         /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4-daniel
+INF-13/06/2021 22:12:33-Ubicación script de instalacion:          /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/sotp1.sh-daniel
+INF-13/06/2021 22:12:33-Log de la instalacion:                    /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/sotp1.log-daniel
+INF-13/06/2021 22:12:33-Archivo de configuracion:                 /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/sotp1.conf-daniel
+INF-13/06/2021 22:12:33-Log de inicializacion:                    /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/soinit.log-daniel
+INF-13/06/2021 22:12:33-Log del proceso principal:                /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/tpcuotas.log-daniel
+INF-13/06/2021 22:12:33-Directorio de ejecutables:                /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:33-Directorio de tablas maestras:            /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:33-Directorio de novedades:                  /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:33-Directorio de novedades aceptadas:        /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP/ok-daniel
+INF-13/06/2021 22:12:33-Directorio de rechazados:                 /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:33-Directorio de lotes procesados:           /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:33-Directorio de liquidaciones:              /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:33-Estado de la instalacion:                 LISTA-daniel
+INF-13/06/2021 22:12:36-¿Confirma la instalacion? (SI/NO): -daniel
+INF-13/06/2021 22:12:36-Respuesta del usuario si-daniel
+INF-13/06/2021 22:12:36-Archivo de configuracion creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/sotp1.conf-daniel
+INF-13/06/2021 22:12:36-GRUPO /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4-daniel
+INF-13/06/2021 22:12:36-DIRCONF /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop-daniel
+INF-13/06/2021 22:12:36-DIRBIN /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:36-DIRMAE /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:36-DIRENT /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:36-DIRRECH /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:36-DIRPROC /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:36-DIRSAL /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:36-INSTALACION 13/06/2021 22:12:36 daniel-daniel
+INF-13/06/2021 22:12:36-Log de inicialización creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/soinit.log-daniel
+INF-13/06/2021 22:12:36-Log del proceso principal creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/tpcuotas.log-daniel
+INF-13/06/2021 22:12:36-Directorio de ejecutables creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:36-Copiando directorio /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/original/bin a /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/bin-daniel
+INF-13/06/2021 22:12:36-Directorio de tablas del sistema creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:36-Copiando /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/original/financiacion.txt a /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:36-Copiando /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/original/terminales.txt a /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/master-daniel
+INF-13/06/2021 22:12:36-Directorio de novedades creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP-daniel
+INF-13/06/2021 22:12:36-Directorio de novedades aceptadas creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/ENTRADATP/ok-daniel
+INF-13/06/2021 22:12:36-Directorio de archivos rechazados creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/rechazos-daniel
+INF-13/06/2021 22:12:36-Directorio de lotes procesados creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/lotes-daniel
+INF-13/06/2021 22:12:36-Directorio de resultados creado en: /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/SALIDATP-daniel
+INF-13/06/2021 22:12:36-Removiendo archivo /home/daniel/Documents/Daniel/sistemas_operativos/sistemas_operativos_tp1/Grupo4/sisop/.confirmed_directories-daniel
+INF-13/06/2021 22:12:36-Estado de la instalación:                     COMPLETADA-daniel

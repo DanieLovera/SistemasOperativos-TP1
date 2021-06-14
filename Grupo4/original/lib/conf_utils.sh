@@ -77,9 +77,12 @@ function is_missing_directory() {
 # @return Devuelve 1 en caso de que falte un archivo
 # principal y 0 en caso contrario.
 function is_missing_file() {
-	# TODO: ACA TAMBIEN HAY QUE AGREGAR REVISAR LOS BINARIOS DEL PASO 5
+
 	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
-		  !	-f "${conf_directories[3]}/terminales.txt" ]]
+		  !	-f "${conf_directories[3]}/terminales.txt" || \
+		  ! -f "${conf_directories[2]}/arrancotp1.sh"  || \
+		  ! -f "${conf_directories[2]}/frenotp1.sh"  || \
+		  ! -f "${conf_directories[2]}/cuotatp.sh" ]]
 	then
 		return 1
 	fi
@@ -148,7 +151,9 @@ function check_system() {
 
 # Da permisos de lectura a los archivos del sistema
 function grant_permissions() {
-	# AGREGAR LUEGO LOS PERMISOS DE LOS EJECUTABLES DEL PASO 5
+	chmod 555 "${conf_directories[2]}/arrancotp1.sh"
+	chmod 555 "${conf_directories[2]}/frenotp1.sh"
+	chmod 555 "${conf_directories[2]}/cuotatp.sh" 
 	chmod 444 "${conf_directories[3]}/financiacion.txt"
 	chmod 444 "${conf_directories[3]}/terminales.txt"
 }
@@ -156,7 +161,21 @@ function grant_permissions() {
 # @return 0 en caso de que todos los archivos tengan permiso de lectura
 # 1 en caso contrario.
 function check_permissions() {
-	# AGREGAR LUEGO LOS PERMISOS DE LOS EJECUTABLES DEL PASO 5
+	if [ ! -x "${conf_directories[2]}/arrancotp1.sh" ]
+	then 
+		return 1
+	fi
+
+	if [ ! -x "${conf_directories[2]}/frenotp1.sh" ]
+	then 
+		return 1
+	fi
+
+		if [ ! -x "${conf_directories[2]}/cuotatp.sh" ]
+	then 
+		return 1
+	fi
+
 	if [ ! -r "${conf_directories[3]}/financiacion.txt" ]
 	then 
 		return 1

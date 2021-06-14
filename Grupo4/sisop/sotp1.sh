@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Rutas de todos los archivos default creados.
-conf_dir=$(dirname $(realpath $0))
-group_dir=$(dirname $conf_dir)
+conf_dir="$(dirname $(realpath $0))"
+group_dir="$(dirname $conf_dir)"
 original_dir="$group_dir/original"
 install_script_path="$conf_dir/sotp1.sh"
 install_log_path="$conf_dir/sotp1.log"
@@ -63,13 +63,13 @@ function ask_for_dir_input() {
 	echo "... Directorio por defecto: $(underline "$2")"
 	log_inf "... Directorio por defecto: $2"
 	read -p "... $group_dir/" tmp_dir
-	log_inf "... $tmp_dir"
+	log_inf "... "$tmp_dir""
 
-	if [ -z "$tmp_dir" ]
+	if [ -z ""$tmp_dir"" ]
 	then
 		tmp_dir=$2
 	else
-		tmp_dir="$group_dir/$tmp_dir"
+		tmp_dir="$group_dir/"$tmp_dir""
 	fi
 }
 
@@ -97,9 +97,9 @@ function read_directory() {
 	echo "${tmp_dir##*/}" >> "$confirmed_directories"
 	log_inf "Prohibiendo nombre de directorio ${tmp_dir##*/}"
 
-	success_message "Quedó configurado el $(bold "$1") en $(underline "$tmp_dir")"
+	success_message "Quedó configurado el $(bold "$1") en $(underline ""$tmp_dir"")"
 	echo ""
-	log_inf "Quedó configurado el $1 en $tmp_dir"
+	log_inf "Quedó configurado el $1 en "$tmp_dir""
 }
 
 # Crea un directorio
@@ -160,7 +160,7 @@ function read_confirmation_response() {
 	else 
 		warning_message "Opción inválida, por favor vuelva a intentar."
 		log_war "Opción inválida, por favor vuelva a intentar."
-		read_confirmation_response $1
+		read_confirmation_response "$1"
 	fi
 }
 
@@ -247,8 +247,10 @@ function make_files() {
 # original
 function make_exe_dir() {
 	make_directory "Directorio de ejecutables" "${conf_directories[2]}"
-	# COPIAR ACA LOS EJECUTABLES CUANDO ESTEN DEL PASO 5.
-	copy_rec_from_to "$group_dir/original/bin" "$exe_dir" 
+	#copy_rec_from_to "$group_dir/original/bin" "$exe_dir" 
+	copy_from_to "${conf_directories[0]}/original/bin/arrancotp1.sh" "${conf_directories[2]}/arrancotp1.sh"
+	copy_from_to "${conf_directories[0]}/original/bin/frenotp1.sh" "${conf_directories[2]}/frenotp1.sh"
+	copy_from_to "${conf_directories[0]}/original/bin/cuotatp.sh" "${conf_directories[2]}/cuotatp.sh" 
 }
 
 # Crea el directorio maestro (del sistema) y copia las tablas maestras
@@ -285,29 +287,29 @@ function install() {
 	echo ""
 
 	read_directory "directorio de ejecutables" "${conf_directories[2]}"
-	conf_directories[2]=$tmp_dir
+	conf_directories[2]="$tmp_dir"
 	log_inf "directorio de ejecutables ${conf_directories[2]}"
 
 	read_directory "directorio de tablas del sistema" "${conf_directories[3]}"
-	conf_directories[3]=$tmp_dir
+	conf_directories[3]="$tmp_dir"
 	log_inf "directorio de tablas del sistema ${conf_directories[3]}"
 
 	read_directory "directorio de novedades" "${conf_directories[4]}"
-	conf_directories[4]=$tmp_dir
+	conf_directories[4]="$tmp_dir"
 	log_inf "directorio de novedades ${conf_directories[4]}"
 	news_input_ok_dir="$tmp_dir/ok"
 	log_inf "directorio de novedades/ok ${news_input_ok_dir}"
 
 	read_directory "directorio de archivos rechazados" "${conf_directories[5]}"
-	conf_directories[5]=$tmp_dir
+	conf_directories[5]="$tmp_dir"
 	log_inf "directorio de archivos rechazados ${conf_directories[5]}"
 
 	read_directory "directorio de lotes procesados" "${conf_directories[6]}"
-	conf_directories[6]=$tmp_dir
+	conf_directories[6]="$tmp_dir"
 	log_inf "directorio de lotes procesados ${conf_directories[6]}"		
 
 	read_directory "directorio de resultados" "${conf_directories[7]}"
-	conf_directories[7]=$tmp_dir	
+	conf_directories[7]="$tmp_dir"	
 	log_inf "directorio de resultados ${conf_directories[7]}"		
 
 	confirm_operation "INSTALACION"
@@ -328,8 +330,8 @@ function exit_on_success() {
 	log_inf "El sistema ya se encuentra instalado."
 	echo ""
 	info_message "Archivo de configuración $(bold "$conf_file_path")"
-	cat $conf_file_path | sed 's/^/\t/'
-	cat $conf_file_path | while read -r; do log_inf $REPLY; done
+	cat "$conf_file_path" | sed 's/^/\t/'
+	cat "$conf_file_path" | while read -r; do log_inf $REPLY; done
 }
 
 # Repara el directorio de ejecucion (bin)
@@ -341,14 +343,72 @@ function repair_exe() {
 		info_message "Reparando $(underline ${conf_directories[2]})..."
 		log_inf "Reparando ${conf_directories[2]}..."
 		make_exe_dir
-		# FALTA CORROBORAR QUE NO SE ELIMINARAN LOS BIN DE ORIGINAL
 		success_message "Reparado $(underline ${conf_directories[2]})"
 		log_inf "Reparado ${conf_directories[2]}"
-	#else
-		# CASO EN QUE ESTE EL DIRECTORIO BIN
-		# PERO HAY QUE CORROBORAR SI ESTAN LOS ARCHIVOS EJECUTABLES
-		# SI NO ESTAN COPIARLOS DE LA CARPETA ORIGINAL
-		# COMO SE HIZO EN REPAIR SYS_TABLE
+
+	else 
+		if [ ! -f "${conf_directories[2]}/cuotatp.sh" ]
+		then
+			echo " "
+			info_message "Reparando ${conf_directories[2]}/cuotatp.sh..."
+			log_inf "Reparando ${conf_directories[2]}/cuotatp.sh..."
+			if [ -f "${conf_directories[0]}/original/bin/cuotatp.sh" ]
+			then
+				copy_from_to "$original_dir/bin/cuotatp.sh" "${conf_directories[2]}"
+				success_message "Reparado ${conf_directories[2]}/cuotatp.sh..."
+				log_inf "Reparado ${conf_directories[2]}/cuotatp.sh..."
+			else
+				error_message "Fallo la reparación de ${conf_directories[2]}/cuotatp.sh"
+				log_err "Fallo la reparación de ${conf_directories[2]}/cuotatp.sh"
+				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/cuotatp.sh"
+				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/cuotatp.sh"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				repaired=0
+			fi
+		fi
+
+		if [ ! -f "${conf_directories[2]}/arrancotp1.sh" ]
+		then
+			echo " "
+			info_message "Reparando ${conf_directories[2]}/arrancotp1.sh..."
+			log_inf "Reparando ${conf_directories[2]}/arrancotp1.sh..."
+			if [ -f "${conf_directories[0]}/original/bin/arrancotp1.sh" ]
+			then
+				copy_from_to "$original_dir/bin/arrancotp1.sh" "${conf_directories[2]}"
+				success_message "Reparado ${conf_directories[2]}/arrancotp1.sh..."
+				log_inf "Reparado ${conf_directories[2]}/arrancotp1.sh..."
+			else
+				error_message "Fallo la reparación de ${conf_directories[2]}/arrancotp1.sh"
+				log_err "Fallo la reparación de ${conf_directories[2]}/arrancotp1.sh"
+				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/arrancotp1.sh"
+				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/arrancotp1.sh"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				repaired=0
+			fi
+		fi
+
+		if [ ! -f "${conf_directories[2]}/frenotp1.sh" ]
+		then
+			echo " "
+			info_message "Reparando ${conf_directories[2]}/frenotp1.sh..."
+			log_inf "Reparando ${conf_directories[2]}/frenotp1.sh..."
+			if [ -f "${conf_directories[0]}/original/bin/frenotp1.sh" ]
+			then
+				copy_from_to "$original_dir/bin/frenotp1.sh" "${conf_directories[2]}"
+				success_message "Reparado ${conf_directories[2]}/frenotp1.sh..."
+				log_inf "Reparado ${conf_directories[2]}/frenotp1.sh..."
+			else
+				error_message "Fallo la reparación de ${conf_directories[2]}/frenotp1.sh"
+				log_err "Fallo la reparación de ${conf_directories[2]}/frenotp1.sh"
+				error_message "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/frenotp1.sh"
+				log_err "No se pudo encontrar el archivo ${conf_directories[0]}/original/bin/frenotp1.sh"
+				info_message "Para corregir el error se debe descargar el archivo faltante de github"
+				log_err "Para corregir el error se debe descargar el archivo faltante de github"
+				repaired=0
+			fi
+		fi
 	fi
 	return ${repaired}
 }
@@ -461,7 +521,7 @@ function repair_rejected() {
 		echo " "
 		info_message "Reparando ${conf_directories[5]}..."
 		log_inf "Reparando ${conf_directories[5]}..."
-		make_directory "Directorio de archivos rechazados" ${conf_directories[5]}
+		make_directory "Directorio de archivos rechazados" "${conf_directories[5]}"
 		success_message "Reparado ${conf_directories[5]}"
 		log_inf "Reparado ${conf_directories[5]}"
 	fi
@@ -475,7 +535,7 @@ function repair_lots() {
 		echo " "
 		info_message "Reparando ${conf_directories[6]}..."
 		log_inf "Reparando ${conf_directories[6]}..."
-		make_directory "Directorio de lotes procesados" ${conf_directories[6]}
+		make_directory "Directorio de lotes procesados" "${conf_directories[6]}"
 		success_message "Reparado ${conf_directories[6]}"
 		log_inf "Reparado ${conf_directories[6]}"
 	fi
@@ -489,7 +549,7 @@ function repair_results() {
 		echo " "
 		info_message "Reparando ${conf_directories[7]}..."
 		log_inf "Reparando ${conf_directories[7]}..."
-		make_directory "Directorio de resultados" ${conf_directories[7]}
+		make_directory "Directorio de resultados" "${conf_directories[7]}"
 		success_message "Reparado ${conf_directories[7]}"
 		log_inf "Reparado ${conf_directories[7]}"
 	fi

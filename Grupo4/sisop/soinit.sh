@@ -15,6 +15,8 @@ lib_dir="$group_dir/original/lib"
 # include log
 . "$lib_dir/log.sh" "$conf_dir/soinit.log"
 
+. "$lib_dir/run_utils.sh" "$conf_dir/soinit.log"
+
 conf_file_path="$conf_dir/sotp1.conf"
 install_script_path="$conf_dir/sotp1.sh"
 
@@ -106,6 +108,7 @@ function run() {
 				log_inf "Se inició el ambiente correctamente"
 			fi
 		else
+			#if [  ]
 			check_if_program_is_running
 			if [ $? -eq 0 ]
 			then
