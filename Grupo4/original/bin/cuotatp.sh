@@ -16,7 +16,16 @@ lib_dir="$GRUPO/original/lib"
 . "$lib_dir/log.sh" "$path_to_log"
 
 cycle=1
-
+function reject_file() {
+    file_name_rejected=${line}
+    if [ -f ${path_to_rechazos}/${file_name_rejected} ] 
+    then
+        file_name_rejected="${line}_duplicate"
+    fi 
+    mv "${path_to_entry}/${line}" "${path_to_rechazos}/${file_name_rejected}" 
+    echo $(error_message "$line se rechazó por $1")
+    log_err "${line} se rechazo por $1"
+}
 
 function reject_field() {
     local rejected_transactions=${path_to_rechazos}/${comercio}/transacciones.rech
@@ -25,46 +34,41 @@ function reject_field() {
 }
 
 function duplicate() {
+    ls ${path_to_entry} -I 'ok' | \
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
 		if [  -f  "${path_to_lote}/${line}" ]
         then
-            mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            log_err "${line} se rechazo por estar duplicado"
-        else
-            echo ${line}
+            reject_file "estar duplicado"
         fi
 	done
 }
 
 function filter_lote() {
+    ls ${path_to_entry} -I 'ok' | \
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
         local var=$(echo ${line} | grep "^Lote[0-9]\{5\}_[0-9]\{2\}$")
 		if [ -z ${var} ]
         then
-            mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            log_err "${line} se rechazo por nombre no valido"
-        else
-            echo ${line}
+            reject_file "nombre no valido"
         fi
 	done
 }
 
 function filter_empty() {
+    ls ${path_to_entry} -I 'ok' | \
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
-		if [ ! -s ${line} ] 
+		if [ -s ${line} ] 
         then
-            echo ${line}
-        else 
-            mv "${path_to_entry}/${line}" "${path_to_rechazos}" 
-            log_err "${line} se rechazo por estar vacio"
+            reject_file "estar vacio"
         fi
 	done
 }
 
 function move_to_ok() {
+    ls ${path_to_entry} -I 'ok' | \
     while IFS='' read -r line || [[ -n "${line}" ]]
 	do
 		mv ${path_to_entry}/${line} ${path_to_entry}/ok
@@ -73,7 +77,10 @@ function move_to_ok() {
 }
 
 function filter_files() {
-    ls ${path_to_entry} -I 'ok' | filter_lote | filter_empty | duplicate | move_to_ok
+    filter_lote 
+    filter_empty
+    duplicate
+    move_to_ok
 }
 
 function process_files() {
@@ -245,6 +252,12 @@ function sumar_mes() {
     fecha_cuota="${anio}0${mes}${dia}"
 }
 
+
+
+
+echo "" # Para evitar que quede sobre la misma línea de comando
+
+info_message "El sistema está arrancando"
 while [ true ]; do
     log_inf "voy por el ciclo ${cycle}"
     cycle=$((${cycle}+1))
