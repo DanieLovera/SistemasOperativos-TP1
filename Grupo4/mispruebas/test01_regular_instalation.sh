@@ -14,6 +14,7 @@ success=0
 last_error=0
 errors=()
 unistall
+
 correct_instalation="$(fast_install | grep "Estado de la instalación: .*COMPLETADA")"
 if [ -z "$correct_instalation" ]
 then

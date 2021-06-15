@@ -21,13 +21,13 @@ function uninit() {
     unset DIRSAL
 }
 
+function remove_logs() {
+    [ -f "$conf_dir/"*.log ] && rm "$conf_dir/"*.log    
+}
+
 function unistall() {
     [ -f "$conf_dir/sotp1.conf" ] && rm "$conf_dir/sotp1.conf"
     remove_logs
-}
-
-function remove_logs() {
-    [ -f "$conf_dir/*.log" ] && rm "$conf_dir/"*.log    
 }
 
 function make_test_dir() {
