@@ -89,8 +89,8 @@
   4.1 Mueva el/los archivo/s que requiera procesar del directorio tp1datos hacia el directorio
       de entrada que indicó previamente en la instalación o escriba el comando ```echo $DIRENT``` para 
       conocer su ubicación.  
-  4.2 El resultado del proceso se guardara en el directorio indicado por ```ècho $DIRSAL```.
+  4.2 El resultado del proceso se guardara en el directorio indicado por ```echo $DIRSAL```.
 5. Frene el tp para culminar el proceso.  
-  5.1 Ejecute el script en ./bin/frenotp1.sh
+  5.1 Ejecute el script en ```./bin/frenotp1.sh```
 6. Para volver a ejecutar el sistema llame al script freno tp1.  
-  6.1 Ejecute el script en ./bin/arrancotp1.sh
+  6.1 Ejecute el script en ```./bin/arrancotp1.sh```
