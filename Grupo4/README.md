@@ -9,22 +9,6 @@
 
 ## Guía de ejecución rápida
 
-Guía para el desarrollo (no necesariamente va a quedar en el informe final)
-
-```sh
-# Desde .../Grupo4 como referencia, no debería importar
-# desde dónde se ejecuta
-bash sisop/sotp1.sh
-source sisop/soinit.sh
-# Acá debería estar corriendo el sistema
-# Para detenerlo
-bash bin/frenotp1.sh
-# Para volver a arrancarlo
-bash bin/arrancotp1.sh
-# bin o la carpeta que se haya elegido en la instalación
-# más genérico $DIRBIN
-```
-
 ## Acceso ##
 1. Haga click en **[acceso](https://github.com/DanieLovera/sistemas_operativos_tp1)** para dirigirse al repositorio digital de github que contiene los archivos de descarga.  
 
@@ -97,14 +81,16 @@ bash bin/arrancotp1.sh
 
 ## Ejecución del Sistema ##
 1. Navegue hacia el directorio sisop.
-2. Ejecute el script de instalación ***sotp1.sh***
+2. Ejecute el script de instalación ***sotp1.sh***  
   2.1 Ingrese el comando ```bash sotp1.sh```
 3. Inicialice el sistema.  
   3.1 Ingrese el comando ```source soinit.sh```
 4. Con el sistema inicializado:  
   4.1 Mueva el/los archivo/s que requiera procesar del directorio tp1datos hacia el directorio
-      de entrada que indicó previamente en la instalación.
+      de entrada que indicó previamente en la instalación o escriba el comando ```echo $DIRENT``` para 
+      conocer su ubicación.  
+  4.2 El resultado del proceso se guardara en el directorio indicado por ```ècho $DIRSAL```.
 5. Frene el tp para culminar el proceso.  
   5.1 Ejecute el script en ./bin/frenotp1.sh
-6. Para volver a ejecutar el sistema llame al script freno tp1.
+6. Para volver a ejecutar el sistema llame al script freno tp1.  
   6.1 Ejecute el script en ./bin/arrancotp1.sh
