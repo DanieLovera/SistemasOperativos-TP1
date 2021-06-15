@@ -1,5 +1,5 @@
-*.conf
-*.log
+sisop/*.conf
+sisop/*.log
 
 *.rech
 

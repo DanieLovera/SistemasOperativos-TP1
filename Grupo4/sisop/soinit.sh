@@ -2,11 +2,11 @@
 # Como este script se tiene que ejecutar con `source` o con `. <script>`
 # no se puede usar $0.
 function real_path() {
-	echo $(dirname $(realpath ${BASH_SOURCE[0]}))
+	echo "$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 }
 
 conf_dir="$(real_path)"
-group_dir="$(dirname $conf_dir)"
+group_dir="$(dirname "$conf_dir")"
 lib_dir="$group_dir/original/lib"
 
 # include pprint
@@ -101,12 +101,22 @@ function run() {
 		check_install_script
 		return 1
 	fi
-
-	check_env_configuration
+	
+	is_env_init
 	if [ $? -eq 0 ]
-	then		
-		show_start_program_guide
-		return 0
+	then
+		check_env_configuration
+		if [ $? -eq 0 ]
+		then
+			check_if_program_is_running
+			if [ $? -eq 0 ]
+			then
+				show_stop_program_guide
+			else
+				show_start_program_guide
+			fi
+			return 0
+		fi
 	fi
 
 	set_environments_vars

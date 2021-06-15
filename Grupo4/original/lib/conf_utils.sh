@@ -25,7 +25,7 @@ function check_install_script() {
 
 # Devuelve 1 en caso de que falle el conf_file 0 en caso de todo ok
 function check_conf_file() {
-	if [ ! -f  $conf_file_path ]
+	if [ ! -f  "$conf_file_path" ]
 	then
 		error_message "No se encontró el archivo $(bold "$conf_file_path")"
 		log_err "No se encontró el archivo $conf_file_path"
@@ -42,8 +42,8 @@ function load_conf_directories() {
 	local counter=0
 	while [ $counter -lt $CONFIG_ARG_LEN ]
 	do
-		conf_directories[counter]=$(sed -n "$(($counter + 1))p" "$1" | sed "s/^.*-//")
-		if [ -z $conf_directories[counter] ]
+		conf_directories[$counter]="$(sed -n "$(($counter + 1))p" "$1" | sed "s/^[^-]*-//")"
+		if [ -z "${conf_directories[$counter]}" ]
 		then
 			return 1
 		fi
@@ -66,7 +66,8 @@ function is_missing_directory() {
 	do
     	if [[ ! -d "$directory" ]] 
     	then
-			warning_message "$directory no existe"
+			warning_message "$(bold "$directory") no existe"
+			log_war "$directory no existe"
        		return 1
     	fi
 	done
@@ -77,16 +78,43 @@ function is_missing_directory() {
 # @return Devuelve 1 en caso de que falte un archivo
 # principal y 0 en caso contrario.
 function is_missing_file() {
-
-	if [[ ! -f "${conf_directories[3]}/financiacion.txt" || \
-		  !	-f "${conf_directories[3]}/terminales.txt" || \
-		  ! -f "${conf_directories[2]}/arrancotp1.sh"  || \
-		  ! -f "${conf_directories[2]}/frenotp1.sh"  || \
-		  ! -f "${conf_directories[2]}/cuotatp.sh" ]]
+	local error=0
+	if [ ! -f "${conf_directories[3]}/financiacion.txt" ]
 	then
-		return 1
+		warning_message "$(bold "${conf_directories[3]}/financiacion.txt") no existe"
+		log_war "${conf_directories[3]}/financiacion.txt no existe"
+		error=1
 	fi
-	return 0
+
+	if [ ! -f "${conf_directories[3]}/terminales.txt" ]
+	then
+		warning_message "$(bold "${conf_directories[3]}/terminales.txt") no existe"
+		log_war "${conf_directories[3]}/terminales.txt no existe"
+		error=1
+	fi
+
+	if [ ! -f "${conf_directories[2]}/arrancotp1.sh" ]
+	then
+		warning_message "$(bold "${conf_directories[2]}/arrancotp1.sh") no existe"
+		log_war "${conf_directories[2]}/arrancotp1.sh no existe"
+		error=1
+	fi
+
+	if [ ! -f "${conf_directories[2]}/frenotp1.sh" ]
+	then
+		warning_message "$(bold "${conf_directories[2]}/frenotp1.sh") no existe"
+		log_war "${conf_directories[2]}/frenotp1.sh no existe"
+		error=1
+	fi
+
+	if [ ! -f "${conf_directories[2]}/cuotatp.sh" ]
+	then
+		warning_message "$(bold "${conf_directories[2]}/cuotatp.sh") no existe"
+		log_war "${conf_directories[2]}/cuotatp.sh no existe"
+		error=1
+	fi
+
+	return $error
 }
 
 # @return 0 en caso de que todos los directorios sean distintos.
@@ -96,7 +124,7 @@ function are_distinct_directories() {
 	do
 		for (( j=$(( i + 1 )); j<$CONFIG_ARG_LEN; j++))
 		do
-			if [ "${conf_directories[$i]}" == "${conf_directories[$j]}" ]
+			if [[ "${conf_directories[$i]}" == "${conf_directories[$j]}" ]]
 			then
 				return 1
 			fi
@@ -161,38 +189,52 @@ function grant_permissions() {
 # @return 0 en caso de que todos los archivos tengan permiso de lectura
 # 1 en caso contrario.
 function check_permissions() {
+	local error=0
 	if [ ! -x "${conf_directories[2]}/arrancotp1.sh" ]
 	then 
-		return 1
+		warning_message "$(bold "${conf_directories[2]}/arrancotp1.sh") no tiene permisos de ejecución"
+		log_war "${conf_directories[2]}/arrancotp1.sh no tiene permisos de ejecución"
+		error=1
 	fi
 
 	if [ ! -x "${conf_directories[2]}/frenotp1.sh" ]
 	then 
-		return 1
+		warning_message "$(bold "${conf_directories[2]}/frenotp1.sh") no tiene permisos de ejecución"
+		log_war "${conf_directories[2]}/frenotp1.sh no tiene permisos de ejecución"
+		error=1
 	fi
 
-		if [ ! -x "${conf_directories[2]}/cuotatp.sh" ]
+	if [ ! -x "${conf_directories[2]}/cuotatp.sh" ]
 	then 
-		return 1
+		warning_message "$(bold "${conf_directories[2]}/cuotatp.sh") no tiene permisos de ejecución"
+		log_war "${conf_directories[2]}/cuotatp.sh no tiene permisos de ejecución"
+		error=1
 	fi
 
 	if [ ! -r "${conf_directories[3]}/financiacion.txt" ]
 	then 
-		return 1
+		warning_message "$(bold "${conf_directories[3]}/financiacion.txt") no tiene permisos de lectura"
+		log_war "${conf_directories[3]}/financiacion.txt no tiene permisos de lectura"
+		error=1
 	fi
 
 	if [ ! -r "${conf_directories[3]}/terminales.txt" ]
 	then 
-		return 1
+		warning_message "$(bold "${conf_directories[3]}/terminales.txt") no tiene permisos de lectura"
+		log_war "${conf_directories[3]}/terminales.txt no tiene permisos de lectura"
+		error=1
 	fi
 
-	info_message "Permisos de tablas maestras y ejecutables...$(display_ok)"
-	log_inf "Permisos de tablas maestras y ejecutables ok"
-	return 0	
+	if [ $error -ne 1 ]
+	then
+		info_message "Permisos de tablas maestras y ejecutables...$(display_ok)"
+		log_inf "Permisos de tablas maestras y ejecutables ok"
+	fi
+	return $error
 }
 
 
-# @return 0 en caso de que el entorno coincida con la configuración del
+# @return 0 en caso de que el ambiente coincida con la configuración del
 # archivo de configuración, 1 en caso contrario.
 function check_env_configuration() {
 	if [[ "$GRUPO" == "${conf_directories[0]}" && \
@@ -206,5 +248,7 @@ function check_env_configuration() {
 	then
 		return 0
 	fi
+	warning_message "Las variables de ambiente no coinciden con las del archivo de configuración"
+	log_war "Las variables de ambiente no coinciden con las del archivo de configuración"
 	return 1
 }

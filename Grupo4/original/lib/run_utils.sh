@@ -31,12 +31,11 @@ function show_stop_program_guide() {
 function show_start_program_guide() {
 	if [ ! -f "$start_script_path" ]
 	then
-		echo "$start_script_path"
 		error_message "No se encontró el script para arrancar el sistema $(bold "arrancotp1.sh")"
 		log_err "No se encontró el script para arrancar el sistema frenotp1.sh"
 		install_warning_message
 	else
-		echo -e $(info_message "Para poder arrancar el sistema, ejecute $(bold "bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")")")
+		info_message "Para poder arrancar el sistema, ejecute $(bold "bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")")"
 		log_inf "Para poder arrancar el sistema, ejecute bash $(echo "$start_script_path" | sed "s-^$(pwd)/--")"
 	fi
 }
@@ -49,7 +48,7 @@ function get_current_pid() {
 # 1 en caso contrario
 function check_if_program_is_running() {
 	if [[ -f "$temp_pid_locator_path" && \
-          -e /proc/$(get_current_pid) ]]
+          -e "/proc/$(get_current_pid)" ]]
 	then
 		return 0
 	else
@@ -67,6 +66,15 @@ function is_env_init() {
 	     -z "$DIRPROC" -o \
 	     -z "$DIRSAL" ]
 	then
+		return 1
+	fi
+	return 0
+}
+
+function check_and_show_if_env_is_init() {
+	is_env_init
+	if [ $? -ne 0 ]
+	then
 		error_message "El ambiento no está correctamente inicializado inicializado"
 		info_message "Ejecute \"$(bold "$(echo "source $1/sisop/soinit.sh" | sed "s-^$(pwd)/--")")\" para inicializarlo"
 		log_err "El ambiento no está correctamente inicializado inicializado"
@@ -81,7 +89,7 @@ function run_main_process() {
 	TP_PID="$!"
 	info_message "El sistema arrancó con pid: $(bold "$TP_PID")"
 	log_inf "El sistema arrancó con pid: $TP_PID"
-	echo $TP_PID > $temp_pid_locator_path
+	echo "$TP_PID" > "$temp_pid_locator_path"
 }
 
 function stop_main_process() {

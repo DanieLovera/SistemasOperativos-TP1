@@ -1,0 +1,90 @@
+INF-15/06/2021 06:30:12-Iniciando sistema...-moreover
+INF-15/06/2021 06:30:12-Creando archivo /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/.confirmed_directories-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio Grupo4-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio sisop-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio original-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio tp1datos-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio misdatos-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio mispruebas-moreover
+INF-15/06/2021 06:30:12-Comenzando instalacion del sistema...-moreover
+INF-15/06/2021 06:30:12-Defina el nombre del directorio de ejecutables o enter para continuar-moreover
+INF-15/06/2021 06:30:12-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/bin-moreover
+INF-15/06/2021 06:30:12-... ejecutables-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio ejecutables-moreover
+INF-15/06/2021 06:30:12-Quedó configurado el directorio de ejecutables en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables-moreover
+INF-15/06/2021 06:30:12-directorio de ejecutables /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables-moreover
+INF-15/06/2021 06:30:12-Defina el nombre del directorio de tablas del sistema o enter para continuar-moreover
+INF-15/06/2021 06:30:12-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/master-moreover
+INF-15/06/2021 06:30:12-... tablas-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio tablas-moreover
+INF-15/06/2021 06:30:12-Quedó configurado el directorio de tablas del sistema en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:12-directorio de tablas del sistema /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:12-Defina el nombre del directorio de novedades o enter para continuar-moreover
+INF-15/06/2021 06:30:12-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ENTRADATP-moreover
+INF-15/06/2021 06:30:12-... novedades-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio novedades-moreover
+INF-15/06/2021 06:30:12-Quedó configurado el directorio de novedades en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades-moreover
+INF-15/06/2021 06:30:12-directorio de novedades /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades-moreover
+INF-15/06/2021 06:30:12-directorio de novedades/ok /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades/ok-moreover
+INF-15/06/2021 06:30:12-Defina el nombre del directorio de archivos rechazados o enter para continuar-moreover
+INF-15/06/2021 06:30:12-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazos-moreover
+INF-15/06/2021 06:30:12-... rechazados-moreover
+INF-15/06/2021 06:30:12-Prohibiendo nombre de directorio rechazados-moreover
+INF-15/06/2021 06:30:12-Quedó configurado el directorio de archivos rechazados en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazados-moreover
+INF-15/06/2021 06:30:12-directorio de archivos rechazados /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazados-moreover
+INF-15/06/2021 06:30:12-Defina el nombre del directorio de lotes procesados o enter para continuar-moreover
+INF-15/06/2021 06:30:13-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/lotes-moreover
+INF-15/06/2021 06:30:13-... procesados-moreover
+INF-15/06/2021 06:30:13-Prohibiendo nombre de directorio procesados-moreover
+INF-15/06/2021 06:30:13-Quedó configurado el directorio de lotes procesados en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/procesados-moreover
+INF-15/06/2021 06:30:13-directorio de lotes procesados /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/procesados-moreover
+INF-15/06/2021 06:30:13-Defina el nombre del directorio de resultados o enter para continuar-moreover
+INF-15/06/2021 06:30:13-... Directorio por defecto: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/SALIDATP-moreover
+INF-15/06/2021 06:30:13-... resultados-moreover
+INF-15/06/2021 06:30:13-Prohibiendo nombre de directorio resultados-moreover
+INF-15/06/2021 06:30:13-Quedó configurado el directorio de resultados en /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/resultados-moreover
+INF-15/06/2021 06:30:13-directorio de resultados /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/resultados-moreover
+INF-15/06/2021 06:30:13-TP1 SO7508 Cuatrimestre I 2021 Curso Martes Grupo4-moreover
+INF-15/06/2021 06:30:13-Tipo de proceso:                          INSTALACION-moreover
+INF-15/06/2021 06:30:13-Directorio padre:                         /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4-moreover
+INF-15/06/2021 06:30:13-Ubicación script de instalacion:          /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/sotp1.sh-moreover
+INF-15/06/2021 06:30:13-Log de la instalacion:                    /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/sotp1.log-moreover
+INF-15/06/2021 06:30:13-Archivo de configuracion:                 /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/sotp1.conf-moreover
+INF-15/06/2021 06:30:13-Log de inicializacion:                    /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/soinit.log-moreover
+INF-15/06/2021 06:30:13-Log del proceso principal:                /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/tpcuotas.log-moreover
+INF-15/06/2021 06:30:13-Directorio de ejecutables:                /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables-moreover
+INF-15/06/2021 06:30:13-Directorio de tablas maestras:            /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:13-Directorio de novedades:                  /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades-moreover
+INF-15/06/2021 06:30:13-Directorio de novedades aceptadas:        /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades/ok-moreover
+INF-15/06/2021 06:30:13-Directorio de rechazados:                 /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazados-moreover
+INF-15/06/2021 06:30:13-Directorio de lotes procesados:           /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/procesados-moreover
+INF-15/06/2021 06:30:13-Directorio de liquidaciones:              /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/resultados-moreover
+INF-15/06/2021 06:30:13-Estado de la instalacion:                 LISTA-moreover
+INF-15/06/2021 06:30:13-¿Confirma la instalacion? (SI/NO): -moreover
+INF-15/06/2021 06:30:13-Respuesta del usuario si-moreover
+INF-15/06/2021 06:30:13-Archivo de configuracion creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/sotp1.conf-moreover
+INF-15/06/2021 06:30:13-GRUPO /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4-moreover
+INF-15/06/2021 06:30:13-DIRCONF /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop-moreover
+INF-15/06/2021 06:30:13-DIRBIN /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables-moreover
+INF-15/06/2021 06:30:13-DIRMAE /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:13-DIRENT /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades-moreover
+INF-15/06/2021 06:30:13-DIRRECH /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazados-moreover
+INF-15/06/2021 06:30:13-DIRPROC /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/procesados-moreover
+INF-15/06/2021 06:30:13-DIRSAL /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/resultados-moreover
+INF-15/06/2021 06:30:13-INSTALACION 15/06/2021 06:30:13 moreover-moreover
+INF-15/06/2021 06:30:13-Log de inicialización creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/soinit.log-moreover
+INF-15/06/2021 06:30:13-Log del proceso principal creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/tpcuotas.log-moreover
+INF-15/06/2021 06:30:13-Directorio de ejecutables creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables-moreover
+INF-15/06/2021 06:30:13-Copiando /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/original/bin/arrancotp1.sh a /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables/arrancotp1.sh-moreover
+INF-15/06/2021 06:30:13-Copiando /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/original/bin/frenotp1.sh a /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables/frenotp1.sh-moreover
+INF-15/06/2021 06:30:13-Copiando /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/original/bin/cuotatp.sh a /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/ejecutables/cuotatp.sh-moreover
+INF-15/06/2021 06:30:13-Directorio de tablas del sistema creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:13-Copiando /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/original/financiacion.txt a /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:13-Copiando /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/original/terminales.txt a /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/tablas-moreover
+INF-15/06/2021 06:30:13-Directorio de novedades creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades-moreover
+INF-15/06/2021 06:30:13-Directorio de novedades aceptadas creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/novedades/ok-moreover
+INF-15/06/2021 06:30:13-Directorio de archivos rechazados creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/rechazados-moreover
+INF-15/06/2021 06:30:13-Directorio de lotes procesados creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/procesados-moreover
+INF-15/06/2021 06:30:13-Directorio de resultados creado en: /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/resultados-moreover
+INF-15/06/2021 06:30:13-Removiendo archivo /home/moreover/Desktop/sistemas_operativos_tp1/Grupo4/sisop/.confirmed_directories-moreover
+INF-15/06/2021 06:30:13-Estado de la instalación:                     COMPLETADA-moreover

@@ -1,5 +1,5 @@
 #!/bin/bash
-LOG_FILE=$1 # TODO: Ver si sigue guncionando con varios includes
+LOG_FILE=$1 
 
 function log() {
 	echo "$1-$(date "+%d/%m/%Y %H:%M:%S")-$2-$(whoami)" >> "$3"
